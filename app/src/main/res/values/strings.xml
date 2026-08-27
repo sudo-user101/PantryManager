@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pantry Basic</string>
+
+    <string name="title_pantry_list">My Pantry</string>
+    <string name="title_add_ingredient">Add Ingredient</string>
+    <string name="title_edit_ingredient">Edit Ingredient</string>
+
+    <string name="label_name">Name</string>
+    <string name="label_quantity">Quantity</string>
+    <string name="label_unit">Unit</string>
+
+    <string name="hint_name">e.g. Rice</string>
+    <string name="hint_quantity">e.g. 2</string>
+    <string name="hint_unit">e.g. kg</string>
+
+    <string name="action_save">Save</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_add">Add</string>
+
+    <string name="error_name_required">Please enter a name</string>
+    <string name="error_quantity_required">Please enter a quantity</string>
+    <string name="error_quantity_invalid">Quantity must be a positive number</string>
+
+    <string name="empty_pantry">No ingredients yet. Tap + to add one.</string>
+
+    <string name="delete_confirm_title">Delete this item?</string>
+    <string name="delete_confirm_message">This cannot be undone.</string>
+    <string name="action_cancel">Cancel</string>
+</resources>
