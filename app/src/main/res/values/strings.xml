@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Pantry Basic</string>
+    <string name="app_name">Pantry Manager</string>
 
     <string name="title_pantry_list">My Pantry</string>
     <string name="title_add_ingredient">Add Ingredient</string>
