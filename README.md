@@ -1,4 +1,4 @@
-# Pantry Basic
+# Pantry Manager
 
 A small Java Android app for practicing the same core idea as Smart Pantry Manager, but kept
 deliberately simple: track pantry ingredients (name, quantity, unit) using SQLite and basic
