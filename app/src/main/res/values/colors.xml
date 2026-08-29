@@ -9,4 +9,9 @@
     <!-- Pantry List row typography hierarchy (migrated from SmartPantryManager's Pantry List) -->
     <color name="text_secondary">#666666</color>
     <color name="text_tertiary">#999999</color>
+
+    <!-- Add/Edit Ingredient form foundation (migrated from SmartPantryManager's Add/Edit screen) -->
+    <color name="divider">#D1D1D6</color>
+    <color name="error">#CC0000</color>
+    <color name="error_bg">#FBEAEA</color>
 </resources>
