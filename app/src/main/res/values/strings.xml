@@ -22,7 +22,8 @@
     <string name="error_quantity_required">Please enter a quantity</string>
     <string name="error_quantity_invalid">Quantity must be a positive number</string>
 
-    <string name="empty_pantry">No ingredients yet. Tap + to add one.</string>
+    <string name="empty_pantry_title">No ingredients yet</string>
+    <string name="empty_pantry_message">Add your first ingredient to get started.</string>
 
     <string name="delete_confirm_title">Delete this item?</string>
     <string name="delete_confirm_message">This cannot be undone.</string>

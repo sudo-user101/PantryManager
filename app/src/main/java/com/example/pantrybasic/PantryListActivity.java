@@ -22,7 +22,7 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
 
     private DatabaseHelper databaseHelper;
     private PantryAdapter adapter;
-    private View textEmpty;
+    private View emptyState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +30,17 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
         setContentView(R.layout.activity_pantry_list);
 
         databaseHelper = DatabaseHelper.getInstance(this);
-        textEmpty = findViewById(R.id.textEmpty);
+        emptyState = findViewById(R.id.emptyStatePantry);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewPantry);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new PantryAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        findViewById(R.id.fabAdd).setOnClickListener(v ->
-                startActivity(new Intent(this, AddEditIngredientActivity.class)));
+        View.OnClickListener openAddScreen = v ->
+                startActivity(new Intent(this, AddEditIngredientActivity.class));
+        findViewById(R.id.fabAdd).setOnClickListener(openAddScreen);
+        findViewById(R.id.buttonEmptyAdd).setOnClickListener(openAddScreen);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
     private void loadItems() {
         List<PantryItem> items = databaseHelper.getAllItems();
         adapter.setItems(items);
-        textEmpty.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
+        emptyState.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -5,4 +5,8 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
+
+    <!-- Pantry List row typography hierarchy (migrated from SmartPantryManager's Pantry List) -->
+    <color name="text_secondary">#666666</color>
+    <color name="text_tertiary">#999999</color>
 </resources>
