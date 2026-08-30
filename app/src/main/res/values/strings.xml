@@ -38,4 +38,8 @@
     <string name="recipe_ready_now">Ready to make</string>
     <string name="recipe_missing_one">Missing 1 ingredient</string>
     <string name="recipe_missing_count">Missing %d ingredients</string>
+
+    <string name="title_recipe_detail">Recipe Detail</string>
+    <string name="label_ingredients">Ingredients</string>
+    <string name="label_method">Method</string>
 </resources>

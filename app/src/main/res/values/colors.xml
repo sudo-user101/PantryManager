@@ -14,4 +14,7 @@
     <color name="divider">#D1D1D6</color>
     <color name="error">#CC0000</color>
     <color name="error_bg">#FBEAEA</color>
+
+    <!-- Recipe Detail have/missing ingredient indication -->
+    <color name="success">#2F6B4F</color>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.pantrybasic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -22,7 +23,7 @@ import java.util.List;
  * match), and an "Almost There" list of recipes missing exactly one ingredient. A recipe
  * missing two or more ingredients appears in neither list.
  */
-public class SuggestedRecipesActivity extends AppCompatActivity {
+public class SuggestedRecipesActivity extends AppCompatActivity implements RecipeAdapter.Listener {
 
     private DatabaseHelper databaseHelper;
     private RecipeAdapter suggestedAdapter;
@@ -43,12 +44,12 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
 
         RecyclerView recyclerSuggested = findViewById(R.id.recyclerSuggested);
         recyclerSuggested.setLayoutManager(new LinearLayoutManager(this));
-        suggestedAdapter = new RecipeAdapter();
+        suggestedAdapter = new RecipeAdapter(this);
         recyclerSuggested.setAdapter(suggestedAdapter);
 
         RecyclerView recyclerAlmostThere = findViewById(R.id.recyclerAlmostThere);
         recyclerAlmostThere.setLayoutManager(new LinearLayoutManager(this));
-        almostThereAdapter = new RecipeAdapter();
+        almostThereAdapter = new RecipeAdapter(this);
         recyclerAlmostThere.setAdapter(almostThereAdapter);
 
         emptyStateSuggested = findViewById(R.id.emptyStateSuggested);
@@ -81,5 +82,12 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
 
         emptyStateSuggested.setVisibility(suggested.isEmpty() ? View.VISIBLE : View.GONE);
         emptyStateAlmostThere.setVisibility(almostThere.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onRecipeClick(RecipeMatchResult result) {
+        Intent intent = new Intent(this, RecipeDetailActivity.class);
+        intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, result.getRecipe().getId());
+        startActivity(intent);
     }
 }

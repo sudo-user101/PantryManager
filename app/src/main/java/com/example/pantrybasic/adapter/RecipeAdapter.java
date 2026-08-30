@@ -22,7 +22,16 @@ import java.util.List;
  */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
+    public interface Listener {
+        void onRecipeClick(RecipeMatchResult result);
+    }
+
     private final List<RecipeMatchResult> items = new ArrayList<>();
+    private final Listener listener;
+
+    public RecipeAdapter(Listener listener) {
+        this.listener = listener;
+    }
 
     public void setItems(List<RecipeMatchResult> newItems) {
         items.clear();
@@ -40,7 +49,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(items.get(position));
+        holder.bind(items.get(position), listener);
     }
 
     @Override
@@ -59,7 +68,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             textStatus = itemView.findViewById(R.id.textStatus);
         }
 
-        void bind(RecipeMatchResult result) {
+        void bind(RecipeMatchResult result, Listener listener) {
             textName.setText(result.getRecipe().getName());
 
             if (result.isFullMatch()) {
@@ -70,6 +79,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                         ? itemView.getContext().getString(R.string.recipe_missing_one)
                         : itemView.getContext().getString(R.string.recipe_missing_count, missing));
             }
+
+            itemView.setOnClickListener(v -> listener.onRecipeClick(result));
         }
     }
 }

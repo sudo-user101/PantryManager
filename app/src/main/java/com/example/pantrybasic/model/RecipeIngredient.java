@@ -71,4 +71,12 @@ public class RecipeIngredient {
     public void setUnit(String unit) {
         this.unit = unit;
     }
+
+    /** Human readable form, e.g. "200 g flour", used on the Recipe Detail screen. */
+    public String toDisplayString() {
+        String qty = (quantity == Math.floor(quantity))
+                ? String.valueOf((long) quantity)
+                : String.valueOf(quantity);
+        return qty + " " + unit + " " + name;
+    }
 }
