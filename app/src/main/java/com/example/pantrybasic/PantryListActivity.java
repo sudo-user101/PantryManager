@@ -78,6 +78,10 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
             startActivity(new Intent(this, SuggestedRecipesActivity.class));
             return true;
         }
+        if (item.getItemId() == R.id.actionViewSettings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

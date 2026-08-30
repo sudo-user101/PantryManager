@@ -203,6 +203,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return ingredients;
     }
 
+    /**
+     * Wipes and re-seeds the recipe collection only (used by "Reset sample recipes" in
+     * Settings). The user's pantry is untouched.
+     */
+    public void resetRecipes() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_RECIPE_INGREDIENTS, null, null);
+            db.delete(TABLE_RECIPES, null, null);
+            RecipeSeeder.seed(db);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
     private ContentValues toValues(PantryItem item) {
         ContentValues values = new ContentValues();
         values.put(COL_NAME, item.getName());
