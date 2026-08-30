@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Base shape for pantry item avatars - a single shared drawable, mutated and tinted per
+     instance in Java (PantryAdapter) to the ingredient's category colour. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/avatar_tint_neutral" />
+    <corners android:radius="18dp" />
+</shape>

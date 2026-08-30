@@ -1,18 +1,25 @@
 package com.example.pantrybasic;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.pantrybasic.db.DatabaseHelper;
 import com.example.pantrybasic.model.PantryItem;
+import com.example.pantrybasic.util.FoodIconCatalog;
+import com.example.pantrybasic.util.FoodIconResolver;
 
 /**
  * One form used for both Create and Update: launched with no extra it inserts a new
@@ -32,6 +39,16 @@ public class AddEditIngredientActivity extends AppCompatActivity {
     private TextView textErrorName;
     private TextView textErrorQuantity;
 
+    private FrameLayout avatarPreviewContainer;
+    private TextView textAvatarPreview;
+    private TextView textFoodIconEmoji;
+    private TextView textFoodIconLabel;
+
+    private String selectedIconEmoji = FoodIconResolver.DEFAULT_EMOJI;
+    /** Once the user opens the picker and confirms a choice, typing in the Name field no
+     * longer overrides the avatar - their explicit choice always wins. */
+    private boolean iconManuallyChosen = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +65,42 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         editUnit = findViewById(R.id.editUnit);
         textErrorName = findViewById(R.id.textErrorName);
         textErrorQuantity = findViewById(R.id.textErrorQuantity);
+        avatarPreviewContainer = findViewById(R.id.avatarPreviewContainer);
+        textAvatarPreview = findViewById(R.id.textAvatarPreview);
+        textFoodIconEmoji = findViewById(R.id.textFoodIconEmoji);
+        textFoodIconLabel = findViewById(R.id.textFoodIconLabel);
 
         Button buttonSave = findViewById(R.id.buttonSave);
         Button buttonDelete = findViewById(R.id.buttonDelete);
         buttonSave.setOnClickListener(v -> attemptSave());
         buttonDelete.setOnClickListener(v -> confirmDelete());
+
+        View.OnClickListener openPicker = v -> IconPickerBottomSheet.show(
+                getSupportFragmentManager(), selectedIconEmoji, this, emoji -> {
+                    selectedIconEmoji = emoji;
+                    iconManuallyChosen = true;
+                    refreshIconDisplay();
+                });
+        avatarPreviewContainer.setOnClickListener(openPicker);
+        findViewById(R.id.rowFoodIcon).setOnClickListener(openPicker);
+
+        editName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!iconManuallyChosen) {
+                    selectedIconEmoji = FoodIconResolver.defaultEmojiFor(s.toString());
+                    refreshIconDisplay();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         editingItemId = getIntent().getLongExtra(EXTRA_ITEM_ID, NO_ID);
         if (editingItemId != NO_ID) {
@@ -62,7 +110,26 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         } else {
             setTitle(R.string.title_add_ingredient);
             buttonDelete.setVisibility(View.GONE);
+            selectedIconEmoji = FoodIconResolver.defaultEmojiFor("");
         }
+
+        refreshIconDisplay();
+    }
+
+    private void refreshIconDisplay() {
+        textAvatarPreview.setText(selectedIconEmoji);
+        textFoodIconEmoji.setText(selectedIconEmoji);
+
+        String category = FoodIconCatalog.categoryOf(selectedIconEmoji);
+        textFoodIconLabel.setText(category != null ? category : getString(R.string.label_tap_to_change));
+
+        Drawable bg = ContextCompat.getDrawable(this, R.drawable.bg_avatar);
+        if (bg != null) {
+            bg = bg.mutate();
+            bg.setTint(ContextCompat.getColor(this, FoodIconResolver.tintColorRes(
+                    editName.getText() != null ? editName.getText().toString() : "")));
+        }
+        avatarPreviewContainer.setBackground(bg);
     }
 
     @Override
@@ -81,6 +148,10 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         editName.setText(item.getName());
         editQuantity.setText(formatQuantity(item.getQuantity()));
         editUnit.setText(item.getUnit());
+
+        selectedIconEmoji = item.getIconEmoji() != null && !item.getIconEmoji().isEmpty()
+                ? item.getIconEmoji() : FoodIconResolver.defaultEmojiFor(item.getName());
+        iconManuallyChosen = true; // don't let the name text-watcher override a saved choice
     }
 
     private void attemptSave() {
@@ -120,9 +191,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         }
 
         if (editingItemId == NO_ID) {
-            databaseHelper.insertItem(new PantryItem(name, quantity, unit));
+            databaseHelper.insertItem(new PantryItem(name, quantity, unit, selectedIconEmoji));
         } else {
-            databaseHelper.updateItem(new PantryItem(editingItemId, name, quantity, unit));
+            databaseHelper.updateItem(new PantryItem(editingItemId, name, quantity, unit, selectedIconEmoji));
         }
 
         Toast.makeText(this, R.string.action_save, Toast.LENGTH_SHORT).show();

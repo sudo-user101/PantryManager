@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.pantrybasic.model.PantryItem;
 import com.example.pantrybasic.model.Recipe;
 import com.example.pantrybasic.model.RecipeIngredient;
+import com.example.pantrybasic.util.FoodIconResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +25,14 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "pantry_basic.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     public static final String TABLE_PANTRY = "pantry_items";
     public static final String COL_ID = "_id";
     public static final String COL_NAME = "name";
     public static final String COL_QUANTITY = "quantity";
     public static final String COL_UNIT = "unit";
+    public static final String COL_ICON = "icon_emoji";
 
     // recipes columns
     public static final String TABLE_RECIPES = "recipes";
@@ -65,7 +67,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COL_NAME + " TEXT NOT NULL, "
                 + COL_QUANTITY + " REAL NOT NULL, "
-                + COL_UNIT + " TEXT NOT NULL)");
+                + COL_UNIT + " TEXT NOT NULL, "
+                + COL_ICON + " TEXT)");
 
         createRecipeTables(db);
         RecipeSeeder.seed(db);
@@ -73,14 +76,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Migrates in place rather than dropping and recreating, so a version bump can never wipe
-     * the user's own pantry data. pantry_items is untouched by this migration - only the two
-     * new recipe tables are added for anyone upgrading from version 1.
+     * the user's own pantry data.
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 2) {
             createRecipeTables(db);
             RecipeSeeder.seed(db);
+        }
+        if (oldVersion < 3) {
+            // Existing rows get a NULL icon_emoji; fromCursor() resolves a fallback for those
+            // at read time rather than backfilling every row here.
+            db.execSQL("ALTER TABLE " + TABLE_PANTRY + " ADD COLUMN " + COL_ICON + " TEXT");
         }
     }
 
@@ -225,6 +232,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_NAME, item.getName());
         values.put(COL_QUANTITY, item.getQuantity());
         values.put(COL_UNIT, item.getUnit());
+        values.put(COL_ICON, item.getIconEmoji());
         return values;
     }
 
@@ -233,6 +241,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME));
         double quantity = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_QUANTITY));
         String unit = cursor.getString(cursor.getColumnIndexOrThrow(COL_UNIT));
-        return new PantryItem(id, name, quantity, unit);
+        String icon = cursor.getString(cursor.getColumnIndexOrThrow(COL_ICON));
+        if (icon == null || icon.isEmpty()) {
+            icon = FoodIconResolver.defaultEmojiFor(name);
+        }
+        return new PantryItem(id, name, quantity, unit, icon);
     }
 }

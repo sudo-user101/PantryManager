@@ -17,4 +17,13 @@
 
     <!-- Recipe Detail have/missing ingredient indication -->
     <color name="success">#2F6B4F</color>
+
+    <!-- Ingredient icon avatars (migrated from SmartPantryManager's food-icon feature) -->
+    <color name="avatar_tint_red">#FBEAEA</color>
+    <color name="avatar_tint_orange">#FDF0E1</color>
+    <color name="avatar_tint_green">#EAF3EA</color>
+    <color name="avatar_tint_blue">#EAF0F5</color>
+    <color name="avatar_tint_beige">#F5EFE6</color>
+    <color name="avatar_tint_pink">#FBEAEE</color>
+    <color name="avatar_tint_neutral">#F0F0F2</color>
 </resources>

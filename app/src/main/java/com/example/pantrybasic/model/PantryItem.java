@@ -10,6 +10,13 @@ public class PantryItem {
     private double quantity;
     private String unit;
 
+    /** A single emoji chosen for this item's avatar (e.g. "🍅"). See
+     * {@code DatabaseHelper.COL_ICON} - null for rows created through the constructors below
+     * that don't take one; {@code DatabaseHelper} resolves a fallback via
+     * {@link com.example.pantrybasic.util.FoodIconResolver#defaultEmojiFor(String)} at read
+     * time, so it is never left null in practice once loaded back from the database. */
+    private String iconEmoji;
+
     public PantryItem() {
     }
 
@@ -20,9 +27,19 @@ public class PantryItem {
         this.unit = unit;
     }
 
+    public PantryItem(long id, String name, double quantity, String unit, String iconEmoji) {
+        this(id, name, quantity, unit);
+        this.iconEmoji = iconEmoji;
+    }
+
     /** Convenience constructor for a new item that doesn't have an id yet. */
     public PantryItem(String name, double quantity, String unit) {
         this(0L, name, quantity, unit);
+    }
+
+    /** Convenience constructor for a new item that doesn't have an id yet, with an icon chosen. */
+    public PantryItem(String name, double quantity, String unit, String iconEmoji) {
+        this(0L, name, quantity, unit, iconEmoji);
     }
 
     public long getId() {
@@ -55,5 +72,13 @@ public class PantryItem {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public String getIconEmoji() {
+        return iconEmoji;
+    }
+
+    public void setIconEmoji(String iconEmoji) {
+        this.iconEmoji = iconEmoji;
     }
 }

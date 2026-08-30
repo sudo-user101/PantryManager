@@ -49,4 +49,9 @@
     <string name="reset_recipes_summary">Restore the built-in recipe collection</string>
     <string name="toast_recipes_reset">Recipes reset</string>
     <string name="settings_version_label">Version %s</string>
+
+    <string name="label_food_icon">Food Icon</string>
+    <string name="label_tap_to_change">Tap to change</string>
+    <string name="title_choose_icon">Choose Icon</string>
+    <string name="action_use_this_icon">Use This Icon</string>
 </resources>
