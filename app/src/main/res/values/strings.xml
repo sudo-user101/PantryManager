@@ -3,8 +3,13 @@
     <string name="app_name">Pantry Manager</string>
 
     <string name="title_pantry_list">My Pantry</string>
+    <string name="subtitle_pantry_list">Everything you have on hand</string>
     <string name="title_add_ingredient">Add Ingredient</string>
     <string name="title_edit_ingredient">Edit Ingredient</string>
+
+    <string name="hint_search_ingredients">Search ingredients</string>
+    <string name="action_clear_search">Clear search</string>
+    <string name="empty_search_message">No ingredients match your search.</string>
 
     <string name="label_name">Name</string>
     <string name="label_quantity">Quantity</string>
@@ -29,8 +34,8 @@
     <string name="delete_confirm_message">This cannot be undone.</string>
     <string name="action_cancel">Cancel</string>
 
-    <string name="action_view_recipes">Recipes</string>
     <string name="title_suggested_recipes">Suggested Recipes</string>
+    <string name="subtitle_suggested_recipes">Based on what\'s in your pantry</string>
     <string name="header_suggested">Ready to make</string>
     <string name="header_almost_there">Almost there</string>
     <string name="empty_suggested_message">No recipes match your pantry yet.</string>
@@ -43,15 +48,19 @@
     <string name="label_ingredients">Ingredients</string>
     <string name="label_method">Method</string>
 
-    <string name="action_view_settings">Settings</string>
     <string name="title_settings">Settings</string>
     <string name="action_reset_recipes">Reset Sample Recipes</string>
     <string name="reset_recipes_summary">Restore the built-in recipe collection</string>
     <string name="toast_recipes_reset">Recipes reset</string>
     <string name="settings_version_label">Version %s</string>
 
+    <string name="nav_pantry">Pantry</string>
+    <string name="nav_suggested">Recipes</string>
+    <string name="nav_settings">Settings</string>
+
     <string name="label_food_icon">Food Icon</string>
     <string name="label_tap_to_change">Tap to change</string>
+    <string name="action_change_icon">Change</string>
     <string name="title_choose_icon">Choose Icon</string>
     <string name="action_use_this_icon">Use This Icon</string>
 </resources>

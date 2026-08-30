@@ -122,7 +122,7 @@ public class IconPickerBottomSheet extends BottomSheetDialogFragment {
         for (Map.Entry<String, TextView> entry : categoryTabs.entrySet()) {
             boolean active = entry.getKey().equals(category);
             entry.getValue().setTextColor(ContextCompat.getColor(requireContext(),
-                    active ? R.color.success : R.color.text_secondary));
+                    active ? R.color.accent : R.color.text_secondary));
             entry.getValue().setTypeface(null, active ? Typeface.BOLD : Typeface.NORMAL);
         }
 

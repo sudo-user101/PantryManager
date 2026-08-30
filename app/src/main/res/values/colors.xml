@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Restrained, Apple-inspired neutral palette (light), migrated from SmartPantryManager.
+    Every screen pulls from these tokens rather than hardcoded hex values, and the identical
+    resource names in values-night/colors.xml let the whole app adapt to dark mode
+    automatically (via the DayNight theme) with no per-screen branching.
+-->
 <resources>
+
+    <!-- Launcher icon background only - unrelated to in-app theming, left as-is. -->
     <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="black">#FF000000</color>
 
-    <!-- Pantry List row typography hierarchy (migrated from SmartPantryManager's Pantry List) -->
-    <color name="text_secondary">#666666</color>
-    <color name="text_tertiary">#999999</color>
+    <!-- Surfaces -->
+    <color name="background">#F5F5F7</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_secondary">#F2F2F7</color>
 
-    <!-- Add/Edit Ingredient form foundation (migrated from SmartPantryManager's Add/Edit screen) -->
+    <!-- Text -->
+    <color name="text_primary">#1D1D1F</color>
+    <color name="text_secondary">#6E6E73</color>
+    <color name="text_tertiary">#8E8E93</color>
+
+    <!-- Structure -->
     <color name="divider">#D1D1D6</color>
-    <color name="error">#CC0000</color>
+
+    <!-- Accent (used sparingly: primary actions, selected nav state, status) -->
+    <color name="accent">#2F6B4F</color>
+    <color name="accent_pressed">#25573F</color>
+    <color name="on_accent">#FFFFFF</color>
+
+    <!-- Status -->
+    <color name="warning">#C97A00</color>
+    <color name="warning_bg">#FBF0E1</color>
+    <color name="error">#C62828</color>
     <color name="error_bg">#FBEAEA</color>
-
-    <!-- Recipe Detail have/missing ingredient indication -->
     <color name="success">#2F6B4F</color>
+    <color name="success_bg">#E8F1EC</color>
 
-    <!-- Ingredient icon avatars (migrated from SmartPantryManager's food-icon feature) -->
+    <color name="white">#FFFFFF</color>
+
+    <!-- Pantry item avatar background tints - deliberately very subtle -->
     <color name="avatar_tint_red">#FBEAEA</color>
     <color name="avatar_tint_orange">#FDF0E1</color>
     <color name="avatar_tint_green">#EAF3EA</color>
@@ -26,4 +46,10 @@
     <color name="avatar_tint_beige">#F5EFE6</color>
     <color name="avatar_tint_pink">#FBEAEE</color>
     <color name="avatar_tint_neutral">#F0F0F2</color>
+
+    <!-- Floating "Liquid Glass" navigation -->
+    <color name="glass_nav_bg">#D9FFFFFF</color>
+    <color name="glass_nav_border">#40D1D1D6</color>
+    <color name="nav_selected_capsule">#1A2F6B4F</color>
+
 </resources>

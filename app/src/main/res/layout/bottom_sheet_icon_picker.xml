@@ -35,9 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="sans-serif-medium"
             android:text="@string/title_choose_icon"
-            android:textSize="16sp" />
+            android:textAppearance="@style/TextAppearance.PB.CardTitle" />
     </FrameLayout>
 
     <HorizontalScrollView
@@ -63,14 +62,11 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonUseIcon"
+        style="@style/Widget.PB.Button.Primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="8dp"
-        android:text="@string/action_use_this_icon"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        app:backgroundTint="@color/purple_500"
-        app:cornerRadius="12dp" />
+        android:text="@string/action_use_this_icon" />
 
 </LinearLayout>

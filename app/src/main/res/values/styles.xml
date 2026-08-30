@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Design system, migrated from SmartPantryManager's Widget.SPM.*/TextAppearance.SPM.*
+    styles (renamed to the PB.* prefix to match this project's own identity).
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ============================== TYPOGRAPHY ============================== -->
+    <style name="TextAppearance.PB.LargeTitle" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TextAppearance.PB.SectionTitle" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textSize">21sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TextAppearance.PB.CardTitle" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textSize">17sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TextAppearance.PB.Body" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="TextAppearance.PB.Secondary" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="TextAppearance.PB.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/text_tertiary</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <style name="TextAppearance.PB.FieldLabel" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">12.5sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <style name="TextAppearance.PB.FieldValue" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <!-- ============================== TOOLBAR (back-navigation screens only) ============================== -->
+    <style name="Toolbar.PantryBasic" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">@color/background</item>
+        <item name="titleTextColor">@color/text_primary</item>
+        <item name="titleTextAppearance">@style/TextAppearance.PB.CardTitle</item>
+        <item name="navigationIconTint">@color/text_primary</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <!-- ============================== BUTTONS ============================== -->
+    <style name="Widget.PB.Button.Primary" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/pb_button_bg</item>
+        <item name="android:textColor">@color/on_accent</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="cornerRadius">14dp</item>
+        <item name="elevation">0dp</item>
+        <item name="android:stateListAnimator">@animator/button_press</item>
+        <item name="rippleColor">@color/on_accent</item>
+    </style>
+
+    <style name="Widget.PB.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="rippleColor">@color/accent</item>
+    </style>
+
+    <!-- Restrained destructive action: a muted red-tinted fill rather than a jarring solid
+         red button, matching the calm status-pill language used elsewhere (warning/error). -->
+    <style name="Widget.PB.Button.Destructive" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/error_bg</item>
+        <item name="android:textColor">@color/error</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:paddingTop">13dp</item>
+        <item name="android:paddingBottom">13dp</item>
+        <item name="cornerRadius">14dp</item>
+        <item name="elevation">0dp</item>
+        <item name="android:stateListAnimator">@animator/button_press</item>
+        <item name="rippleColor">@color/error</item>
+    </style>
+
+    <!-- ============================== CARDS / ROWS ============================== -->
+    <style name="Widget.PB.Card.Row" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/surface</item>
+        <item name="cardCornerRadius">14dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="rippleColor">@color/divider</item>
+        <item name="android:stateListAnimator">@animator/card_press</item>
+    </style>
+
+    <!-- ============================== FAB ============================== -->
+    <style name="Widget.PB.Fab" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/accent</item>
+        <item name="tint">@color/on_accent</item>
+        <item name="elevation">2dp</item>
+        <item name="pressedTranslationZ">1dp</item>
+        <item name="fabCustomSize">52dp</item>
+        <item name="maxImageSize">22dp</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.PB.Circle</item>
+        <item name="android:stateListAnimator">@animator/fab_press</item>
+    </style>
+
+    <style name="ShapeAppearance.PB.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- ============================== WINDOW TRANSITIONS ============================== -->
+    <style name="Animation.PB.Screen" parent="android:Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
+    <!-- ============================== SETTINGS (grouped list) ============================== -->
+    <style name="PB.SettingsRow" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">14dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:minHeight">56dp</item>
+    </style>
+
+    <style name="PB.SettingsRowTitle" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textAppearance">@style/TextAppearance.PB.CardTitle</item>
+    </style>
+
+    <style name="PB.SettingsIconChip" parent="">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_marginEnd">14dp</item>
+        <item name="android:background">@drawable/bg_icon_chip</item>
+    </style>
+
+    <!-- ============================== DIVIDER ============================== -->
+    <style name="PB.Divider" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:background">@color/divider</item>
+    </style>
+
+</resources>

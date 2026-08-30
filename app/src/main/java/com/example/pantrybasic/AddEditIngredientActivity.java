@@ -6,7 +6,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -15,6 +14,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.material.button.MaterialButton;
 
 import com.example.pantrybasic.db.DatabaseHelper;
 import com.example.pantrybasic.model.PantryItem;
@@ -33,6 +34,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private long editingItemId = NO_ID;
 
+    private TextView textFormTitle;
     private EditText editName;
     private EditText editQuantity;
     private EditText editUnit;
@@ -56,10 +58,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
         databaseHelper = DatabaseHelper.getInstance(this);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        findViewById(R.id.buttonBack).setOnClickListener(v -> navigateBack());
 
+        textFormTitle = findViewById(R.id.textFormTitle);
         editName = findViewById(R.id.editName);
         editQuantity = findViewById(R.id.editQuantity);
         editUnit = findViewById(R.id.editUnit);
@@ -70,8 +71,8 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         textFoodIconEmoji = findViewById(R.id.textFoodIconEmoji);
         textFoodIconLabel = findViewById(R.id.textFoodIconLabel);
 
-        Button buttonSave = findViewById(R.id.buttonSave);
-        Button buttonDelete = findViewById(R.id.buttonDelete);
+        View buttonSave = findViewById(R.id.buttonSave);
+        MaterialButton buttonDelete = findViewById(R.id.buttonDelete);
         buttonSave.setOnClickListener(v -> attemptSave());
         buttonDelete.setOnClickListener(v -> confirmDelete());
 
@@ -104,16 +105,21 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
         editingItemId = getIntent().getLongExtra(EXTRA_ITEM_ID, NO_ID);
         if (editingItemId != NO_ID) {
-            setTitle(R.string.title_edit_ingredient);
+            textFormTitle.setText(R.string.title_edit_ingredient);
             buttonDelete.setVisibility(View.VISIBLE);
             loadExistingItem(editingItemId);
         } else {
-            setTitle(R.string.title_add_ingredient);
+            textFormTitle.setText(R.string.title_add_ingredient);
             buttonDelete.setVisibility(View.GONE);
             selectedIconEmoji = FoodIconResolver.defaultEmojiFor("");
         }
 
         refreshIconDisplay();
+    }
+
+    private void navigateBack() {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     private void refreshIconDisplay() {
@@ -132,17 +138,11 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         avatarPreviewContainer.setBackground(bg);
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
-    }
-
     private void loadExistingItem(long id) {
         PantryItem item = databaseHelper.getItem(id);
         if (item == null) {
             // Deleted elsewhere between opening the list and tapping this row.
-            finish();
+            navigateBack();
             return;
         }
         editName.setText(item.getName());
@@ -197,7 +197,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         }
 
         Toast.makeText(this, R.string.action_save, Toast.LENGTH_SHORT).show();
-        finish();
+        navigateBack();
     }
 
     private void confirmDelete() {
@@ -207,7 +207,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 .setNegativeButton(R.string.action_cancel, null)
                 .setPositiveButton(R.string.action_delete, (dialog, which) -> {
                     databaseHelper.deleteItem(editingItemId);
-                    finish();
+                    navigateBack();
                 })
                 .show();
     }

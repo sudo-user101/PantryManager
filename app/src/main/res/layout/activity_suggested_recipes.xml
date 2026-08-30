@@ -1,74 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="@color/background">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingVertical="16dp">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="104dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="@string/header_suggested"
-            android:textSize="15sp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerSuggested"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/emptyStateSuggested"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:paddingHorizontal="32dp"
-            android:text="@string/empty_suggested_message"
-            android:textColor="@color/text_secondary"
-            android:visibility="gone" />
+            <!-- Large-title header -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="24dp"
+                android:text="@string/title_suggested_recipes"
+                android:textAppearance="@style/TextAppearance.PB.LargeTitle" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="20dp"
-            android:background="@color/divider" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="22dp"
+                android:text="@string/subtitle_suggested_recipes"
+                android:textAppearance="@style/TextAppearance.PB.Secondary" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="@string/header_almost_there"
-            android:textSize="15sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/header_suggested"
+                android:textAppearance="@style/TextAppearance.PB.SectionTitle" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerAlmostThere"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerSuggested"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:paddingHorizontal="16dp"
+                android:layoutAnimation="@anim/layout_anim_fall_down" />
 
-        <TextView
-            android:id="@+id/emptyStateAlmostThere"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:paddingHorizontal="32dp"
-            android:text="@string/empty_almost_message"
-            android:textColor="@color/text_secondary"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/emptyStateSuggested"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:paddingHorizontal="32dp"
+                android:paddingVertical="20dp"
+                android:text="@string/empty_suggested_message"
+                android:textAppearance="@style/TextAppearance.PB.Secondary"
+                android:visibility="gone" />
 
-    </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="20dp"
+                android:background="@color/divider" />
 
-</ScrollView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/header_almost_there"
+                android:textAppearance="@style/TextAppearance.PB.SectionTitle" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerAlmostThere"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:paddingHorizontal="16dp" />
+
+            <TextView
+                android:id="@+id/emptyStateAlmostThere"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:gravity="center"
+                android:paddingHorizontal="40dp"
+                android:text="@string/empty_almost_message"
+                android:textAppearance="@style/TextAppearance.PB.Secondary"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include layout="@layout/floating_bottom_nav" />
+
+</FrameLayout>

@@ -41,6 +41,11 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+    /** Used by the swipe-to-delete ItemTouchHelper to resolve a swiped row back to its data. */
+    public PantryItem getItemAt(int position) {
+        return items.get(position);
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

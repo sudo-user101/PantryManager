@@ -1,11 +1,14 @@
 package com.example.pantrybasic.adapter;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pantrybasic.R;
@@ -69,18 +72,35 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         }
 
         void bind(RecipeMatchResult result, Listener listener) {
+            Context context = itemView.getContext();
             textName.setText(result.getRecipe().getName());
 
+            int colorRes;
             if (result.isFullMatch()) {
                 textStatus.setText(R.string.recipe_ready_now);
+                colorRes = R.color.success;
             } else {
                 int missing = result.getMissingIngredients().size();
                 textStatus.setText(missing == 1
-                        ? itemView.getContext().getString(R.string.recipe_missing_one)
-                        : itemView.getContext().getString(R.string.recipe_missing_count, missing));
+                        ? context.getString(R.string.recipe_missing_one)
+                        : context.getString(R.string.recipe_missing_count, missing));
+                colorRes = R.color.warning;
             }
+            textStatus.setTextColor(ContextCompat.getColor(context, colorRes));
+            applyStatusDot(context, colorRes);
 
             itemView.setOnClickListener(v -> listener.onRecipeClick(result));
+        }
+
+        private void applyStatusDot(Context context, int colorRes) {
+            Drawable dot = ContextCompat.getDrawable(context, R.drawable.ic_dot_24);
+            if (dot != null) {
+                dot = dot.mutate();
+                dot.setTint(ContextCompat.getColor(context, colorRes));
+                int px = Math.round(6 * context.getResources().getDisplayMetrics().density);
+                dot.setBounds(0, 0, px, px);
+            }
+            textStatus.setCompoundDrawables(dot, null, null, null);
         }
     }
 }

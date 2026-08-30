@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,11 +22,12 @@ import java.util.List;
  * match), and an "Almost There" list of recipes missing exactly one ingredient. A recipe
  * missing two or more ingredients appears in neither list.
  */
-public class SuggestedRecipesActivity extends AppCompatActivity implements RecipeAdapter.Listener {
+public class SuggestedRecipesActivity extends BaseActivity implements RecipeAdapter.Listener {
 
     private DatabaseHelper databaseHelper;
     private RecipeAdapter suggestedAdapter;
     private RecipeAdapter almostThereAdapter;
+    private RecyclerView recyclerSuggested;
     private View emptyStateSuggested;
     private View emptyStateAlmostThere;
 
@@ -36,13 +36,9 @@ public class SuggestedRecipesActivity extends AppCompatActivity implements Recip
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggested_recipes);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
         databaseHelper = DatabaseHelper.getInstance(this);
 
-        RecyclerView recyclerSuggested = findViewById(R.id.recyclerSuggested);
+        recyclerSuggested = findViewById(R.id.recyclerSuggested);
         recyclerSuggested.setLayoutManager(new LinearLayoutManager(this));
         suggestedAdapter = new RecipeAdapter(this);
         recyclerSuggested.setAdapter(suggestedAdapter);
@@ -54,6 +50,8 @@ public class SuggestedRecipesActivity extends AppCompatActivity implements Recip
 
         emptyStateSuggested = findViewById(R.id.emptyStateSuggested);
         emptyStateAlmostThere = findViewById(R.id.emptyStateAlmostThere);
+
+        setupFloatingNav(NAV_RECIPES);
     }
 
     @Override
@@ -61,12 +59,6 @@ public class SuggestedRecipesActivity extends AppCompatActivity implements Recip
         super.onResume();
         // Recompute on every visit - the pantry may have changed since we were last shown.
         runMatchingEngine();
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
     }
 
     private void runMatchingEngine() {
@@ -79,6 +71,7 @@ public class SuggestedRecipesActivity extends AppCompatActivity implements Recip
 
         suggestedAdapter.setItems(suggested);
         almostThereAdapter.setItems(almostThere);
+        recyclerSuggested.scheduleLayoutAnimation();
 
         emptyStateSuggested.setVisibility(suggested.isEmpty() ? View.VISIBLE : View.GONE);
         emptyStateAlmostThere.setVisibility(almostThere.isEmpty() ? View.VISIBLE : View.GONE);
@@ -89,5 +82,6 @@ public class SuggestedRecipesActivity extends AppCompatActivity implements Recip
         Intent intent = new Intent(this, RecipeDetailActivity.class);
         intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, result.getRecipe().getId());
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 }

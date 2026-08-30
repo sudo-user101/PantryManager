@@ -6,25 +6,19 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.pantrybasic.db.DatabaseHelper;
 
 /**
  * Minimal Settings screen - only the rows that correspond to functionality Pantry Basic
- * actually has right now (the recipe collection). Dark mode, expiry alerts, unit system, and
- * default icon all belong to later migrations and are not stubbed here.
+ * actually has right now (the recipe collection). Dark mode override, expiry alerts, unit
+ * system, and default icon all belong to later migrations and are not stubbed here.
  */
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
 
         findViewById(R.id.rowResetRecipes).setOnClickListener(v -> {
             DatabaseHelper.getInstance(this).resetRecipes();
@@ -32,12 +26,8 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         bindVersion();
-    }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
+        setupFloatingNav(NAV_SETTINGS);
     }
 
     private void bindVersion() {

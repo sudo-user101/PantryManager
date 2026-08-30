@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Night-mode override of the root theme. Style resources are swapped wholesale per
+    configuration (not merged item-by-item like colors), so this must fully restate
+    Theme.PantryBasic - the only functional difference from values/themes.xml is the
+    status/nav bar icon flags, which need to flip to light-on-dark now that
+    @color/background is near-black in this configuration.
+-->
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- ============================== ROOT THEME ============================== -->
-    <!-- No ActionBar - every screen either shows a large-title header + floating bottom
-         nav (the three top-level screens) or an explicit MaterialToolbar (push destinations),
-         migrated from SmartPantryManager. -->
     <style name="Theme.PantryBasic" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/accent</item>
         <item name="colorPrimaryDark">@color/background</item>
@@ -14,8 +17,8 @@
         <item name="android:windowBackground">@color/background</item>
         <item name="android:statusBarColor">@color/background</item>
         <item name="android:navigationBarColor">@color/surface</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorSecondary">@color/text_secondary</item>
         <item name="materialButtonStyle">@style/Widget.PB.Button.Primary</item>
