@@ -23,6 +23,12 @@
             android:exported="false"
             android:parentActivityName=".PantryListActivity" />
 
+        <activity
+            android:name=".SuggestedRecipesActivity"
+            android:exported="false"
+            android:label="@string/title_suggested_recipes"
+            android:parentActivityName=".PantryListActivity" />
+
     </application>
 
 </manifest>

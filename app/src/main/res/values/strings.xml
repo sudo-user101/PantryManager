@@ -28,4 +28,14 @@
     <string name="delete_confirm_title">Delete this item?</string>
     <string name="delete_confirm_message">This cannot be undone.</string>
     <string name="action_cancel">Cancel</string>
+
+    <string name="action_view_recipes">Recipes</string>
+    <string name="title_suggested_recipes">Suggested Recipes</string>
+    <string name="header_suggested">Ready to make</string>
+    <string name="header_almost_there">Almost there</string>
+    <string name="empty_suggested_message">No recipes match your pantry yet.</string>
+    <string name="empty_almost_message">Nothing missing just one ingredient right now.</string>
+    <string name="recipe_ready_now">Ready to make</string>
+    <string name="recipe_missing_one">Missing 1 ingredient</string>
+    <string name="recipe_missing_count">Missing %d ingredients</string>
 </resources>

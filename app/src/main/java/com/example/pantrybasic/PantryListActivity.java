@@ -2,6 +2,8 @@ package com.example.pantrybasic;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -62,5 +64,20 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
         Intent intent = new Intent(this, AddEditIngredientActivity.class);
         intent.putExtra(AddEditIngredientActivity.EXTRA_ITEM_ID, item.getId());
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_pantry_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.actionViewRecipes) {
+            startActivity(new Intent(this, SuggestedRecipesActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

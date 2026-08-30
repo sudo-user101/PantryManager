@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.pantrybasic.model.PantryItem;
+import com.example.pantrybasic.model.Recipe;
+import com.example.pantrybasic.model.RecipeIngredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,6 +143,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
         return items;
+    }
+
+    // ----------------------------------------------------------------
+    // Recipes (read-only from the app - the collection is seeded once)
+    // ----------------------------------------------------------------
+
+    /** All recipes with their ingredient lists populated, ordered by name. */
+    public List<Recipe> getAllRecipesWithIngredients() {
+        List<Recipe> recipes = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        try (Cursor cursor = db.query(TABLE_RECIPES, null, null, null,
+                null, null, COL_RECIPE_NAME + " COLLATE NOCASE ASC")) {
+            while (cursor.moveToNext()) {
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_RECIPE_ID));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_RECIPE_NAME));
+                String steps = cursor.getString(cursor.getColumnIndexOrThrow(COL_RECIPE_STEPS));
+                recipes.add(new Recipe(id, name, steps));
+            }
+        }
+        for (Recipe recipe : recipes) {
+            recipe.setIngredients(getIngredientsForRecipe(recipe.getId()));
+        }
+        return recipes;
+    }
+
+    private List<RecipeIngredient> getIngredientsForRecipe(long recipeId) {
+        List<RecipeIngredient> ingredients = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        try (Cursor cursor = db.query(TABLE_RECIPE_INGREDIENTS, null,
+                COL_RI_RECIPE_ID + " = ?", new String[]{String.valueOf(recipeId)},
+                null, null, COL_RI_ID + " ASC")) {
+            while (cursor.moveToNext()) {
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_RI_ID));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_RI_NAME));
+                double quantity = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_RI_QUANTITY));
+                String unit = cursor.getString(cursor.getColumnIndexOrThrow(COL_RI_UNIT));
+                ingredients.add(new RecipeIngredient(id, recipeId, name, quantity, unit));
+            }
+        }
+        return ingredients;
     }
 
     private ContentValues toValues(PantryItem item) {
