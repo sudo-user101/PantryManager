@@ -12,18 +12,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Plain SQLiteOpenHelper for the pantry table. One table, basic CRUD - nothing fancy yet.
+ * SQLiteOpenHelper for the app's data. Two areas so far:
+ * <ul>
+ *     <li>{@code pantry_items} - the user's own ingredients (full CRUD)</li>
+ *     <li>{@code recipes} / {@code recipe_ingredients} - a seeded recipe collection.
+ *     Data foundation only for now: nothing in the app reads these back yet.</li>
+ * </ul>
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "pantry_basic.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     public static final String TABLE_PANTRY = "pantry_items";
     public static final String COL_ID = "_id";
     public static final String COL_NAME = "name";
     public static final String COL_QUANTITY = "quantity";
     public static final String COL_UNIT = "unit";
+
+    // recipes columns
+    public static final String TABLE_RECIPES = "recipes";
+    public static final String COL_RECIPE_ID = "_id";
+    public static final String COL_RECIPE_NAME = "name";
+    public static final String COL_RECIPE_STEPS = "steps";
+
+    // recipe_ingredients columns
+    public static final String TABLE_RECIPE_INGREDIENTS = "recipe_ingredients";
+    public static final String COL_RI_ID = "_id";
+    public static final String COL_RI_RECIPE_ID = "recipe_id";
+    public static final String COL_RI_NAME = "name";
+    public static final String COL_RI_QUANTITY = "quantity";
+    public static final String COL_RI_UNIT = "unit";
 
     private static DatabaseHelper instance;
 
@@ -45,11 +64,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL_NAME + " TEXT NOT NULL, "
                 + COL_QUANTITY + " REAL NOT NULL, "
                 + COL_UNIT + " TEXT NOT NULL)");
+
+        createRecipeTables(db);
+        RecipeSeeder.seed(db);
+    }
+
+    /**
+     * Migrates in place rather than dropping and recreating, so a version bump can never wipe
+     * the user's own pantry data. pantry_items is untouched by this migration - only the two
+     * new recipe tables are added for anyone upgrading from version 1.
+     */
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 2) {
+            createRecipeTables(db);
+            RecipeSeeder.seed(db);
+        }
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Nothing to migrate yet - only one schema version so far.
+    public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.setForeignKeyConstraintsEnabled(true);
+    }
+
+    private void createRecipeTables(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + TABLE_RECIPES + " ("
+                + COL_RECIPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COL_RECIPE_NAME + " TEXT NOT NULL, "
+                + COL_RECIPE_STEPS + " TEXT NOT NULL)");
+
+        db.execSQL("CREATE TABLE " + TABLE_RECIPE_INGREDIENTS + " ("
+                + COL_RI_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COL_RI_RECIPE_ID + " INTEGER NOT NULL, "
+                + COL_RI_NAME + " TEXT NOT NULL, "
+                + COL_RI_QUANTITY + " REAL NOT NULL, "
+                + COL_RI_UNIT + " TEXT NOT NULL, "
+                + "FOREIGN KEY(" + COL_RI_RECIPE_ID + ") REFERENCES " + TABLE_RECIPES + "(" + COL_RECIPE_ID + "))");
     }
 
     public long insertItem(PantryItem item) {
