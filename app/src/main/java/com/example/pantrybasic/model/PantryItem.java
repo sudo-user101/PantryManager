@@ -17,6 +17,9 @@ public class PantryItem {
      * time, so it is never left null in practice once loaded back from the database. */
     private String iconEmoji;
 
+    /** ISO-8601 "yyyy-MM-dd" string, or null if the user did not set one. */
+    private String expiryDate;
+
     public PantryItem() {
     }
 
@@ -32,6 +35,11 @@ public class PantryItem {
         this.iconEmoji = iconEmoji;
     }
 
+    public PantryItem(long id, String name, double quantity, String unit, String iconEmoji, String expiryDate) {
+        this(id, name, quantity, unit, iconEmoji);
+        this.expiryDate = expiryDate;
+    }
+
     /** Convenience constructor for a new item that doesn't have an id yet. */
     public PantryItem(String name, double quantity, String unit) {
         this(0L, name, quantity, unit);
@@ -40,6 +48,12 @@ public class PantryItem {
     /** Convenience constructor for a new item that doesn't have an id yet, with an icon chosen. */
     public PantryItem(String name, double quantity, String unit, String iconEmoji) {
         this(0L, name, quantity, unit, iconEmoji);
+    }
+
+    /** Convenience constructor for a new item that doesn't have an id yet, with an icon and
+     * expiry date chosen. */
+    public PantryItem(String name, double quantity, String unit, String iconEmoji, String expiryDate) {
+        this(0L, name, quantity, unit, iconEmoji, expiryDate);
     }
 
     public long getId() {
@@ -80,5 +94,17 @@ public class PantryItem {
 
     public void setIconEmoji(String iconEmoji) {
         this.iconEmoji = iconEmoji;
+    }
+
+    public String getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public boolean hasExpiryDate() {
+        return expiryDate != null && !expiryDate.trim().isEmpty();
     }
 }

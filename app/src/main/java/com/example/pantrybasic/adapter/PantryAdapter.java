@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pantrybasic.R;
 import com.example.pantrybasic.model.PantryItem;
+import com.example.pantrybasic.util.DateUtils;
 import com.example.pantrybasic.util.FoodIconResolver;
 
 import java.util.ArrayList;
@@ -31,8 +32,15 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     private final List<PantryItem> items = new ArrayList<>();
     private final Listener listener;
 
+    /** Whether the "expiring soon" / "expired" indicator should be shown at all (Settings toggle). */
+    private boolean expiryAlertsEnabled = true;
+
     public PantryAdapter(Listener listener) {
         this.listener = listener;
+    }
+
+    public void setExpiryAlertsEnabled(boolean enabled) {
+        this.expiryAlertsEnabled = enabled;
     }
 
     public void setItems(List<PantryItem> newItems) {
@@ -68,6 +76,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
 
         private final TextView textName;
         private final TextView textQuantity;
+        private final TextView textExpiry;
         private final FrameLayout avatarContainer;
         private final TextView textAvatarEmoji;
 
@@ -75,6 +84,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
             super(itemView);
             textName = itemView.findViewById(R.id.textName);
             textQuantity = itemView.findViewById(R.id.textQuantity);
+            textExpiry = itemView.findViewById(R.id.textExpiry);
             avatarContainer = itemView.findViewById(R.id.avatarContainer);
             textAvatarEmoji = itemView.findViewById(R.id.textAvatarEmoji);
         }
@@ -83,7 +93,50 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
             textName.setText(item.getName());
             textQuantity.setText(formatQuantity(item.getQuantity()) + " " + item.getUnit());
             bindAvatar(item);
+            bindExpiry(item);
             itemView.setOnClickListener(v -> listener.onItemClick(item));
+        }
+
+        private void bindExpiry(PantryItem item) {
+            if (!expiryAlertsEnabled || !item.hasExpiryDate()) {
+                textExpiry.setVisibility(View.GONE);
+                return;
+            }
+
+            Context context = itemView.getContext();
+            String display = DateUtils.formatForDisplay(item.getExpiryDate());
+
+            if (DateUtils.isExpired(item.getExpiryDate())) {
+                textExpiry.setVisibility(View.VISIBLE);
+                textExpiry.setText(context.getString(R.string.expired_label) + " · " + display);
+                textExpiry.setTextColor(ContextCompat.getColor(context, R.color.error));
+                setStatusDot(context, R.color.error);
+            } else if (DateUtils.isExpiringSoon(item.getExpiryDate())) {
+                textExpiry.setVisibility(View.VISIBLE);
+                textExpiry.setText(context.getString(R.string.expiring_soon_label) + " · " + display);
+                textExpiry.setTextColor(ContextCompat.getColor(context, R.color.warning));
+                setStatusDot(context, R.color.warning);
+            } else {
+                // Has an expiry date, but it's neither soon nor past - shown as plain secondary
+                // text with no status dot at all (subtle, not alarming).
+                textExpiry.setVisibility(View.VISIBLE);
+                textExpiry.setText(display);
+                textExpiry.setTextColor(ContextCompat.getColor(context, R.color.text_secondary));
+                textExpiry.setCompoundDrawables(null, null, null, null);
+            }
+        }
+
+        /** (Re-)applies the small leading status dot with the given tint - views are recycled,
+         * so this must be set explicitly on every bind rather than relying on the XML default. */
+        private void setStatusDot(Context context, int colorRes) {
+            Drawable dot = ContextCompat.getDrawable(context, R.drawable.ic_dot_24);
+            if (dot != null) {
+                dot = dot.mutate();
+                dot.setTint(ContextCompat.getColor(context, colorRes));
+                int px = Math.round(7 * context.getResources().getDisplayMetrics().density);
+                dot.setBounds(0, 0, px, px);
+            }
+            textExpiry.setCompoundDrawables(dot, null, null, null);
         }
 
         private void bindAvatar(PantryItem item) {

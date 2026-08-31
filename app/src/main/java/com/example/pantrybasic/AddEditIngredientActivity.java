@@ -1,5 +1,6 @@
 package com.example.pantrybasic;
 
+import android.app.DatePickerDialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,8 +20,11 @@ import com.google.android.material.button.MaterialButton;
 
 import com.example.pantrybasic.db.DatabaseHelper;
 import com.example.pantrybasic.model.PantryItem;
+import com.example.pantrybasic.util.DateUtils;
 import com.example.pantrybasic.util.FoodIconCatalog;
 import com.example.pantrybasic.util.FoodIconResolver;
+
+import java.util.Calendar;
 
 /**
  * One form used for both Create and Update: launched with no extra it inserts a new
@@ -45,11 +49,16 @@ public class AddEditIngredientActivity extends AppCompatActivity {
     private TextView textAvatarPreview;
     private TextView textFoodIconEmoji;
     private TextView textFoodIconLabel;
+    private TextView editExpiryDate;
+    private TextView textClearDate;
 
     private String selectedIconEmoji = FoodIconResolver.DEFAULT_EMOJI;
     /** Once the user opens the picker and confirms a choice, typing in the Name field no
      * longer overrides the avatar - their explicit choice always wins. */
     private boolean iconManuallyChosen = false;
+
+    /** Null while no expiry date has been chosen. */
+    private String selectedExpiryIso = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +79,11 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         textAvatarPreview = findViewById(R.id.textAvatarPreview);
         textFoodIconEmoji = findViewById(R.id.textFoodIconEmoji);
         textFoodIconLabel = findViewById(R.id.textFoodIconLabel);
+        editExpiryDate = findViewById(R.id.editExpiryDate);
+        textClearDate = findViewById(R.id.textClearDate);
+
+        editExpiryDate.setOnClickListener(v -> showDatePicker());
+        textClearDate.setOnClickListener(v -> clearExpiryDate());
 
         View buttonSave = findViewById(R.id.buttonSave);
         MaterialButton buttonDelete = findViewById(R.id.buttonDelete);
@@ -152,6 +166,32 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         selectedIconEmoji = item.getIconEmoji() != null && !item.getIconEmoji().isEmpty()
                 ? item.getIconEmoji() : FoodIconResolver.defaultEmojiFor(item.getName());
         iconManuallyChosen = true; // don't let the name text-watcher override a saved choice
+
+        if (item.hasExpiryDate()) {
+            selectedExpiryIso = item.getExpiryDate();
+            editExpiryDate.setText(DateUtils.formatForDisplay(selectedExpiryIso));
+            editExpiryDate.setTextColor(ContextCompat.getColor(this, R.color.text_primary));
+            textClearDate.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            Calendar picked = Calendar.getInstance();
+            picked.set(year, month, dayOfMonth);
+            selectedExpiryIso = DateUtils.formatForStorage(picked);
+            editExpiryDate.setText(DateUtils.formatForDisplay(selectedExpiryIso));
+            editExpiryDate.setTextColor(ContextCompat.getColor(this, R.color.text_primary));
+            textClearDate.setVisibility(View.VISIBLE);
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void clearExpiryDate() {
+        selectedExpiryIso = null;
+        editExpiryDate.setText(R.string.hint_pick_date);
+        editExpiryDate.setTextColor(ContextCompat.getColor(this, R.color.text_tertiary));
+        textClearDate.setVisibility(View.GONE);
     }
 
     private void attemptSave() {
@@ -191,9 +231,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         }
 
         if (editingItemId == NO_ID) {
-            databaseHelper.insertItem(new PantryItem(name, quantity, unit, selectedIconEmoji));
+            databaseHelper.insertItem(new PantryItem(name, quantity, unit, selectedIconEmoji, selectedExpiryIso));
         } else {
-            databaseHelper.updateItem(new PantryItem(editingItemId, name, quantity, unit, selectedIconEmoji));
+            databaseHelper.updateItem(new PantryItem(editingItemId, name, quantity, unit, selectedIconEmoji, selectedExpiryIso));
         }
 
         Toast.makeText(this, R.string.action_save, Toast.LENGTH_SHORT).show();

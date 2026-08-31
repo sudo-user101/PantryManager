@@ -270,6 +270,64 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <View style="@style/PB.Divider" />
+
+                <!-- Expiry date -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_expiry_date"
+                        android:textAppearance="@style/TextAppearance.PB.FieldLabel" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/editExpiryDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:minHeight="26dp"
+                            android:text="@string/hint_pick_date"
+                            android:textAppearance="@style/TextAppearance.PB.FieldValue"
+                            android:textColor="@color/text_tertiary" />
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginEnd="10dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_calendar_24"
+                            app:tint="@color/text_tertiary" />
+
+                        <TextView
+                            android:id="@+id/textClearDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:fontFamily="sans-serif-medium"
+                            android:padding="4dp"
+                            android:text="@string/action_clear_date"
+                            android:textColor="@color/accent"
+                            android:textSize="13.5sp"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </LinearLayout>
+
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton

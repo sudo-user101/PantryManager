@@ -25,7 +25,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "pantry_basic.db";
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 4;
 
     public static final String TABLE_PANTRY = "pantry_items";
     public static final String COL_ID = "_id";
@@ -33,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_QUANTITY = "quantity";
     public static final String COL_UNIT = "unit";
     public static final String COL_ICON = "icon_emoji";
+    public static final String COL_EXPIRY = "expiry_date";
 
     // recipes columns
     public static final String TABLE_RECIPES = "recipes";
@@ -68,7 +69,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL_NAME + " TEXT NOT NULL, "
                 + COL_QUANTITY + " REAL NOT NULL, "
                 + COL_UNIT + " TEXT NOT NULL, "
-                + COL_ICON + " TEXT)");
+                + COL_ICON + " TEXT, "
+                + COL_EXPIRY + " TEXT)");
 
         createRecipeTables(db);
         RecipeSeeder.seed(db);
@@ -88,6 +90,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // Existing rows get a NULL icon_emoji; fromCursor() resolves a fallback for those
             // at read time rather than backfilling every row here.
             db.execSQL("ALTER TABLE " + TABLE_PANTRY + " ADD COLUMN " + COL_ICON + " TEXT");
+        }
+        if (oldVersion < 4) {
+            // Existing rows get a NULL expiry_date, meaning "no expiry set" - exactly the same
+            // as a freshly-created row with the date left blank, so no fallback is needed here.
+            db.execSQL("ALTER TABLE " + TABLE_PANTRY + " ADD COLUMN " + COL_EXPIRY + " TEXT");
         }
     }
 
@@ -233,6 +240,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_QUANTITY, item.getQuantity());
         values.put(COL_UNIT, item.getUnit());
         values.put(COL_ICON, item.getIconEmoji());
+        values.put(COL_EXPIRY, item.getExpiryDate());
         return values;
     }
 
@@ -245,6 +253,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (icon == null || icon.isEmpty()) {
             icon = FoodIconResolver.defaultEmojiFor(name);
         }
-        return new PantryItem(id, name, quantity, unit, icon);
+        String expiry = cursor.getString(cursor.getColumnIndexOrThrow(COL_EXPIRY));
+        return new PantryItem(id, name, quantity, unit, icon, expiry);
     }
 }

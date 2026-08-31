@@ -65,4 +65,14 @@
     <string name="action_change_icon">Change</string>
     <string name="title_choose_icon">Choose Icon</string>
     <string name="action_use_this_icon">Use This Icon</string>
+
+    <string name="label_expiry_date">Expiry date (optional)</string>
+    <string name="hint_pick_date">Tap to select a date</string>
+    <string name="action_clear_date">Clear date</string>
+    <string name="expiring_soon_label">Expiring soon</string>
+    <string name="expired_label">Expired</string>
+
+    <string name="settings_section_preferences">Preferences</string>
+    <string name="pref_expiry_alerts_title">Expiring-soon alerts</string>
+    <string name="pref_expiry_alerts_summary">Highlight pantry items that expire within 3 days</string>
 </resources>

@@ -23,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.pantrybasic.adapter.PantryAdapter;
 import com.example.pantrybasic.db.DatabaseHelper;
 import com.example.pantrybasic.model.PantryItem;
+import com.example.pantrybasic.util.AppPreferences;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -113,6 +114,7 @@ public class PantryListActivity extends BaseActivity implements PantryAdapter.Li
     private void loadItems() {
         allItems.clear();
         allItems.addAll(databaseHelper.getAllItems());
+        adapter.setExpiryAlertsEnabled(AppPreferences.isExpiryAlertsEnabled(this));
         applyFilter();
     }
 

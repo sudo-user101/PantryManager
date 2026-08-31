@@ -25,6 +25,7 @@ public class SettingsActivity extends BaseActivity {
         setContentView(R.layout.activity_settings);
 
         setupDarkModeRow();
+        setupExpiryAlertsRow();
 
         findViewById(R.id.rowResetRecipes).setOnClickListener(v -> {
             DatabaseHelper.getInstance(this).resetRecipes();
@@ -45,6 +46,13 @@ public class SettingsActivity extends BaseActivity {
             AppCompatDelegate.setDefaultNightMode(
                     checked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         });
+    }
+
+    private void setupExpiryAlertsRow() {
+        SwitchCompat switchExpiryAlerts = findViewById(R.id.switchExpiryAlerts);
+        switchExpiryAlerts.setChecked(AppPreferences.isExpiryAlertsEnabled(this));
+        switchExpiryAlerts.setOnCheckedChangeListener((button, checked) ->
+                AppPreferences.setExpiryAlertsEnabled(this, checked));
     }
 
     private void bindVersion() {
