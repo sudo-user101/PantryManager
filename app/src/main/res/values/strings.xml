@@ -49,6 +49,8 @@
     <string name="label_method">Method</string>
 
     <string name="title_settings">Settings</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_dark_mode_title">Dark Mode</string>
     <string name="action_reset_recipes">Reset Sample Recipes</string>
     <string name="reset_recipes_summary">Restore the built-in recipe collection</string>
     <string name="toast_recipes_reset">Recipes reset</string>

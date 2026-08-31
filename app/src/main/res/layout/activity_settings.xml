@@ -27,10 +27,51 @@
                 android:text="@string/title_settings"
                 android:textAppearance="@style/TextAppearance.PB.LargeTitle" />
 
+            <!-- ============================== APPEARANCE ============================== -->
+            <TextView
+                style="@style/PB.SettingsSectionHeader"
+                android:text="@string/settings_section_appearance" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
+                android:background="@drawable/bg_section_group"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    style="@style/PB.SettingsRow"
+                    android:paddingVertical="14dp">
+
+                    <FrameLayout style="@style/PB.SettingsIconChip">
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_gravity="center"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_moon_24"
+                            app:tint="@color/accent" />
+                    </FrameLayout>
+
+                    <TextView
+                        style="@style/PB.SettingsRowTitle"
+                        android:text="@string/settings_dark_mode_title" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchDarkMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:thumbTint="@color/white"
+                        app:trackTint="@color/pb_switch_track" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/bg_section_group"
                 android:orientation="vertical">
 

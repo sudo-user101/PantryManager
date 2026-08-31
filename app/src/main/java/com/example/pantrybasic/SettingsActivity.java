@@ -6,12 +6,16 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
+
 import com.example.pantrybasic.db.DatabaseHelper;
+import com.example.pantrybasic.util.AppPreferences;
 
 /**
  * Minimal Settings screen - only the rows that correspond to functionality Pantry Basic
- * actually has right now (the recipe collection). Dark mode override, expiry alerts, unit
- * system, and default icon all belong to later migrations and are not stubbed here.
+ * actually has right now (dark mode + the recipe collection). Expiry alerts, unit system, and
+ * a default icon preference all belong to later migrations and are not stubbed here.
  */
 public class SettingsActivity extends BaseActivity {
 
@@ -19,6 +23,8 @@ public class SettingsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        setupDarkModeRow();
 
         findViewById(R.id.rowResetRecipes).setOnClickListener(v -> {
             DatabaseHelper.getInstance(this).resetRecipes();
@@ -28,6 +34,17 @@ public class SettingsActivity extends BaseActivity {
         bindVersion();
 
         setupFloatingNav(NAV_SETTINGS);
+    }
+
+    private void setupDarkModeRow() {
+        SwitchCompat switchDarkMode = findViewById(R.id.switchDarkMode);
+        switchDarkMode.setChecked(AppPreferences.isDarkModeEnabled(this));
+        switchDarkMode.setOnCheckedChangeListener((button, checked) -> {
+            if (checked == AppPreferences.isDarkModeEnabled(this)) return;
+            AppPreferences.setDarkModeEnabled(this, checked);
+            AppCompatDelegate.setDefaultNightMode(
+                    checked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        });
     }
 
     private void bindVersion() {
