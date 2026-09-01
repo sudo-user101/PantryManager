@@ -15,22 +15,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="64dp"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="14dp">
+        android:padding="12dp">
+
+        <FrameLayout
+            android:id="@+id/avatarContainer"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_avatar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textAvatarEmoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="22sp"
+                tools:text="🍝" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/textRecipeName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
             android:layout_marginEnd="12dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.PB.CardTitle"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/avatarContainer"
             app:layout_constraintEnd_toStartOf="@id/textStatus"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/avatarContainer"
+            app:layout_constraintTop_toTopOf="@id/avatarContainer"
             tools:text="Garlic Butter Pasta" />
 
         <TextView
@@ -42,9 +60,9 @@
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
             android:textSize="13.5sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/avatarContainer"
             app:layout_constraintEnd_toStartOf="@id/imageChevron"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/avatarContainer"
             tools:text="Missing 1 ingredient" />
 
         <ImageView
@@ -53,9 +71,9 @@
             android:layout_height="16dp"
             android:contentDescription="@null"
             android:src="@drawable/ic_chevron_right_24"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/avatarContainer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/avatarContainer"
             app:tint="@color/text_tertiary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

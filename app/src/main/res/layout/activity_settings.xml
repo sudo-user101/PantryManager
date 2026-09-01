@@ -123,6 +123,46 @@
                         app:trackTint="@color/pb_switch_track" />
                 </LinearLayout>
 
+                <View style="@style/PB.Divider" />
+
+                <LinearLayout
+                    android:id="@+id/rowUnitSystem"
+                    style="@style/PB.SettingsRow"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingVertical="14dp">
+
+                    <FrameLayout style="@style/PB.SettingsIconChip">
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_gravity="center"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_tab_settings_24"
+                            app:tint="@color/accent" />
+                    </FrameLayout>
+
+                    <TextView
+                        style="@style/PB.SettingsRowTitle"
+                        android:text="@string/pref_units_title" />
+
+                    <TextView
+                        android:id="@+id/textUnitSystemValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:textAppearance="@style/TextAppearance.PB.Secondary"
+                        tools:text="Metric" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_chevron_right_24"
+                        app:tint="@color/text_tertiary" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <!-- ============================== HELP ============================== -->

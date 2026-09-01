@@ -102,6 +102,39 @@ public final class FoodIconResolver {
         INGREDIENT_TINT.put("tuna", R.color.avatar_tint_pink);
     }
 
+    /** Fixed dish emoji for each of the 19 seeded recipes, by exact name - unlike the
+     * ingredient avatar, this is not user-customizable (no picker), so a simple lookup is
+     * enough. */
+    private static final Map<String, String> RECIPE_EMOJI = new LinkedHashMap<>();
+    static {
+        RECIPE_EMOJI.put("Scrambled Eggs on Toast", "🥚");
+        RECIPE_EMOJI.put("Tomato & Onion Omelette", "🥚");
+        RECIPE_EMOJI.put("Spinach & Cheese Omelette", "🥚");
+        RECIPE_EMOJI.put("Garlic Butter Pasta", "🍝");
+        RECIPE_EMOJI.put("Simple Tomato Pasta", "🍝");
+        RECIPE_EMOJI.put("Creamy Mushroom Pasta", "🍝");
+        RECIPE_EMOJI.put("Chicken & Rice Bowl", "🍛");
+        RECIPE_EMOJI.put("Chicken Stir Fry", "🍲");
+        RECIPE_EMOJI.put("Bacon & Egg Fried Rice", "🍚");
+        RECIPE_EMOJI.put("Garlic Fried Rice", "🍚");
+        RECIPE_EMOJI.put("Vegetable Soup", "🍲");
+        RECIPE_EMOJI.put("Mashed Potato", "🥔");
+        RECIPE_EMOJI.put("Cheesy Baked Potato", "🥔");
+        RECIPE_EMOJI.put("Grilled Cheese Sandwich", "🥪");
+        RECIPE_EMOJI.put("Tuna Salad", "🥗");
+        RECIPE_EMOJI.put("Bean & Corn Salad", "🥗");
+        RECIPE_EMOJI.put("Banana Pancakes", "🥞");
+        RECIPE_EMOJI.put("Honey Yogurt Bowl", "🥣");
+        RECIPE_EMOJI.put("Apple Cinnamon Oats", "🥣");
+    }
+
+    /** Dish emoji for one of the seeded recipes, by exact name; a generic plate for anything
+     * else (e.g. if the recipe collection is ever extended). */
+    public static String emojiForRecipe(String recipeName) {
+        String emoji = RECIPE_EMOJI.get(recipeName);
+        return emoji != null ? emoji : "🍽️";
+    }
+
     /** Best-guess default emoji for a freshly-typed ingredient name. Never returns null; falls
      * back to {@link #DEFAULT_EMOJI} when nothing matches (there is no Settings > Default Icon
      * preference in this project to fall back to instead). */

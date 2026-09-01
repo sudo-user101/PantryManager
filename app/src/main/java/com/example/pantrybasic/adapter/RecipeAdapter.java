@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pantrybasic.R;
 import com.example.pantrybasic.model.RecipeMatchResult;
+import com.example.pantrybasic.util.FoodIconResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,16 +66,29 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         private final TextView textName;
         private final TextView textStatus;
+        private final FrameLayout avatarContainer;
+        private final TextView textAvatarEmoji;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             textName = itemView.findViewById(R.id.textRecipeName);
             textStatus = itemView.findViewById(R.id.textStatus);
+            avatarContainer = itemView.findViewById(R.id.avatarContainer);
+            textAvatarEmoji = itemView.findViewById(R.id.textAvatarEmoji);
         }
 
         void bind(RecipeMatchResult result, Listener listener) {
             Context context = itemView.getContext();
-            textName.setText(result.getRecipe().getName());
+            String recipeName = result.getRecipe().getName();
+            textName.setText(recipeName);
+
+            textAvatarEmoji.setText(FoodIconResolver.emojiForRecipe(recipeName));
+            Drawable avatarBg = ContextCompat.getDrawable(context, R.drawable.bg_avatar);
+            if (avatarBg != null) {
+                avatarBg = avatarBg.mutate();
+                avatarBg.setTint(ContextCompat.getColor(context, R.color.avatar_tint_neutral));
+            }
+            avatarContainer.setBackground(avatarBg);
 
             int colorRes;
             if (result.isFullMatch()) {

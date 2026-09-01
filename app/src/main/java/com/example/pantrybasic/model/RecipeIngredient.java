@@ -1,5 +1,7 @@
 package com.example.pantrybasic.model;
 
+import com.example.pantrybasic.util.UnitUtils;
+
 /**
  * A single ingredient requirement that belongs to a {@link Recipe}, e.g. "2 cups flour".
  * Stored as its own row (rather than a flattened string) so a future matching engine can
@@ -78,5 +80,14 @@ public class RecipeIngredient {
                 ? String.valueOf((long) quantity)
                 : String.valueOf(quantity);
         return qty + " " + unit + " " + name;
+    }
+
+    /** Same as {@link #toDisplayString()}, but the quantity/unit shown are converted to the
+     * given "metric"/"imperial" preference (Settings > Preferred unit system) for display only
+     * - this ingredient's own stored {@link #quantity}/{@link #unit} (the recipe's canonical
+     * data) are never modified. */
+    public String toDisplayString(String unitSystem) {
+        UnitUtils.DisplayQuantity display = UnitUtils.toPreferredUnit(quantity, unit, unitSystem);
+        return UnitUtils.formatDisplayQuantity(display.quantity) + " " + display.unit + " " + name;
     }
 }

@@ -25,13 +25,37 @@
             android:paddingHorizontal="20dp"
             android:paddingBottom="32dp">
 
-            <TextView
-                android:id="@+id/textRecipeName"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textAppearance="@style/TextAppearance.PB.LargeTitle"
-                tools:text="Spinach &amp; Cheese Omelette" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:id="@+id/avatarContainer"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/bg_avatar">
+
+                    <TextView
+                        android:id="@+id/textAvatarEmoji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="28sp"
+                        tools:text="🥚" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textRecipeName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:textAppearance="@style/TextAppearance.PB.LargeTitle"
+                    tools:text="Spinach &amp; Cheese Omelette" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textReadyBadge"

@@ -24,6 +24,7 @@ import com.example.pantrybasic.util.AppPreferences;
 import com.example.pantrybasic.util.DateUtils;
 import com.example.pantrybasic.util.FoodIconCatalog;
 import com.example.pantrybasic.util.FoodIconResolver;
+import com.example.pantrybasic.util.UnitUtils;
 
 import java.util.Calendar;
 
@@ -60,6 +61,18 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
     /** Null while no expiry date has been chosen. */
     private String selectedExpiryIso = null;
+
+    /** The item's canonical quantity/unit exactly as stored in the database, captured by
+     * {@link #loadExistingItem} before any Preferred-unit-system display conversion is applied
+     * to the form fields. Only meaningful when {@link #editingItemId} != {@link #NO_ID}. */
+    private double originalQuantity;
+    private String originalUnit;
+    /** The exact text {@link #loadExistingItem} placed into {@link #editQuantity} - if the user
+     * saves without changing this, {@link #attemptSave} writes back {@link #originalQuantity}/
+     * {@link #originalUnit} unchanged rather than re-parsing the (possibly display-converted,
+     * rounded) text, so viewing/re-saving an item under a converted unit system can never drift
+     * the stored value across repeated open/save cycles. */
+    private String initialDisplayedQuantityText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,9 +182,17 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             navigateBack();
             return;
         }
+        originalQuantity = item.getQuantity();
+        originalUnit = item.getUnit();
+
+        String unitSystem = AppPreferences.getUnitSystem(this);
+        UnitUtils.DisplayQuantity display =
+                UnitUtils.toPreferredUnit(item.getQuantity(), item.getUnit(), unitSystem);
+
         editName.setText(item.getName());
-        editQuantity.setText(formatQuantity(item.getQuantity()));
-        editUnit.setText(item.getUnit());
+        initialDisplayedQuantityText = UnitUtils.formatDisplayQuantity(display.quantity);
+        editQuantity.setText(initialDisplayedQuantityText);
+        editUnit.setText(display.unit);
 
         selectedIconEmoji = item.getIconEmoji() != null && !item.getIconEmoji().isEmpty()
                 ? item.getIconEmoji() : FoodIconResolver.defaultEmojiFor(item.getName());
@@ -240,10 +261,22 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             return;
         }
 
+        // If editing an existing item under a display-converted unit system and the quantity
+        // field was never touched, write back the untouched canonical value rather than
+        // re-parsing the (possibly rounded, converted-for-display) text - see the field
+        // comments on originalQuantity/initialDisplayedQuantityText. A genuine edit (the user
+        // actually typed a new number) always saves exactly what they entered, same as before.
+        double finalQuantity = quantity;
+        String finalUnit = unit;
+        if (editingItemId != NO_ID && quantityText.equals(initialDisplayedQuantityText)) {
+            finalQuantity = originalQuantity;
+            finalUnit = originalUnit;
+        }
+
         if (editingItemId == NO_ID) {
-            databaseHelper.insertItem(new PantryItem(name, quantity, unit, selectedIconEmoji, selectedExpiryIso));
+            databaseHelper.insertItem(new PantryItem(name, finalQuantity, finalUnit, selectedIconEmoji, selectedExpiryIso));
         } else {
-            databaseHelper.updateItem(new PantryItem(editingItemId, name, quantity, unit, selectedIconEmoji, selectedExpiryIso));
+            databaseHelper.updateItem(new PantryItem(editingItemId, name, finalQuantity, finalUnit, selectedIconEmoji, selectedExpiryIso));
         }
 
         Toast.makeText(this, R.string.action_save, Toast.LENGTH_SHORT).show();
@@ -265,12 +298,5 @@ public class AddEditIngredientActivity extends AppCompatActivity {
     private void showError(TextView errorView, int stringRes) {
         errorView.setText(stringRes);
         errorView.setVisibility(View.VISIBLE);
-    }
-
-    private String formatQuantity(double quantity) {
-        if (quantity == Math.floor(quantity)) {
-            return String.valueOf((long) quantity);
-        }
-        return String.valueOf(quantity);
     }
 }

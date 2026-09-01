@@ -6,9 +6,9 @@ import android.content.res.Configuration;
 
 /**
  * Thin wrapper around the app's small SharedPreferences file, so every screen reads/writes the
- * same keys through one place instead of repeating raw strings. Dark Mode, expiry alerts, and
- * Tutorial Mode live here so far - unit system and a default icon preference belong to
- * features this project doesn't have yet and are deliberately not stubbed.
+ * same keys through one place instead of repeating raw strings. Dark Mode, expiry alerts,
+ * Tutorial Mode, and preferred unit system live here so far - a default icon preference belongs
+ * to a feature this project doesn't have yet and is deliberately not stubbed.
  */
 public final class AppPreferences {
 
@@ -16,8 +16,10 @@ public final class AppPreferences {
     public static final String KEY_DARK_MODE = "dark_mode_enabled";
     public static final String KEY_EXPIRY_ALERTS = "expiry_alerts_enabled";
     public static final String KEY_TUTORIAL_MODE = "tutorial_mode_enabled";
+    public static final String KEY_UNIT_SYSTEM = "unit_system";
 
     public static final boolean DEFAULT_EXPIRY_ALERTS = true;
+    public static final String DEFAULT_UNIT_SYSTEM = "metric";
 
     private AppPreferences() {
     }
@@ -61,5 +63,15 @@ public final class AppPreferences {
 
     public static void setTutorialModeEnabled(Context context, boolean enabled) {
         prefs(context).edit().putBoolean(KEY_TUTORIAL_MODE, enabled).apply();
+    }
+
+    /** "metric" or "imperial" - see {@link com.example.pantrybasic.util.UnitUtils#toPreferredUnit}.
+     * Defaults to metric so a brand-new install matches the app's existing units unchanged. */
+    public static String getUnitSystem(Context context) {
+        return prefs(context).getString(KEY_UNIT_SYSTEM, DEFAULT_UNIT_SYSTEM);
+    }
+
+    public static void setUnitSystem(Context context, String value) {
+        prefs(context).edit().putString(KEY_UNIT_SYSTEM, value).apply();
     }
 }

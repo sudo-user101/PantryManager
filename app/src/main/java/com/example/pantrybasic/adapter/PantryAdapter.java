@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pantrybasic.R;
 import com.example.pantrybasic.model.PantryItem;
+import com.example.pantrybasic.util.AppPreferences;
 import com.example.pantrybasic.util.DateUtils;
 import com.example.pantrybasic.util.FoodIconResolver;
+import com.example.pantrybasic.util.UnitUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +93,14 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
 
         void bind(PantryItem item) {
             textName.setText(item.getName());
-            textQuantity.setText(formatQuantity(item.getQuantity()) + " " + item.getUnit());
+
+            // Settings > Preferred unit system: display-only conversion (e.g. 500 g -> 17.6 oz)
+            // - the stored item.getQuantity()/getUnit() above are never touched by this.
+            String unitSystem = AppPreferences.getUnitSystem(itemView.getContext());
+            UnitUtils.DisplayQuantity display =
+                    UnitUtils.toPreferredUnit(item.getQuantity(), item.getUnit(), unitSystem);
+            textQuantity.setText(UnitUtils.formatDisplayQuantity(display.quantity) + " " + display.unit);
+
             bindAvatar(item);
             bindExpiry(item);
             itemView.setOnClickListener(v -> listener.onItemClick(item));
@@ -151,13 +160,6 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
                 bg.setTint(ContextCompat.getColor(context, FoodIconResolver.tintColorRes(item.getName())));
             }
             avatarContainer.setBackground(bg);
-        }
-
-        private String formatQuantity(double quantity) {
-            if (quantity == Math.floor(quantity)) {
-                return String.valueOf((long) quantity);
-            }
-            return String.valueOf(quantity);
         }
     }
 }

@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import com.example.pantrybasic.model.Recipe;
 import com.example.pantrybasic.model.RecipeIngredient;
 import com.example.pantrybasic.model.RecipeMatchResult;
 import com.example.pantrybasic.util.AppPreferences;
+import com.example.pantrybasic.util.FoodIconResolver;
 import com.example.pantrybasic.util.IngredientMatcher;
 
 import java.util.ArrayList;
@@ -100,10 +102,24 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         TextView textName = findViewById(R.id.textRecipeName);
         textName.setText(recipe.getName());
+        bindAvatar(recipe.getName());
 
         bindReadyBadge(matchResult);
         bindIngredients(recipe, missingIds);
         bindSteps(recipe.getSteps());
+    }
+
+    private void bindAvatar(String recipeName) {
+        TextView textAvatarEmoji = findViewById(R.id.textAvatarEmoji);
+        textAvatarEmoji.setText(FoodIconResolver.emojiForRecipe(recipeName));
+
+        FrameLayout avatarContainer = findViewById(R.id.avatarContainer);
+        Drawable avatarBg = ContextCompat.getDrawable(this, R.drawable.bg_avatar);
+        if (avatarBg != null) {
+            avatarBg = avatarBg.mutate();
+            avatarBg.setTint(ContextCompat.getColor(this, R.color.avatar_tint_neutral));
+        }
+        avatarContainer.setBackground(avatarBg);
     }
 
     private void bindReadyBadge(RecipeMatchResult matchResult) {
@@ -148,7 +164,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
             ImageView imageStatus = row.findViewById(R.id.imageStatus);
             TextView textLine = row.findViewById(R.id.textIngredientLine);
 
-            textLine.setText(ingredient.toDisplayString());
+            textLine.setText(ingredient.toDisplayString(AppPreferences.getUnitSystem(this)));
             int colorRes = missing ? R.color.error : R.color.success;
             imageStatus.setImageResource(missing ? R.drawable.ic_close_24 : R.drawable.ic_check_24);
             imageStatus.setColorFilter(ContextCompat.getColor(this, colorRes));

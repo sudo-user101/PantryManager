@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -14,10 +15,13 @@ import com.example.pantrybasic.util.AppPreferences;
 
 /**
  * Minimal Settings screen - only the rows that correspond to functionality Pantry Basic
- * actually has right now (dark mode + the recipe collection). Expiry alerts, unit system, and
- * a default icon preference all belong to later migrations and are not stubbed here.
+ * actually has right now (dark mode, expiry alerts, Tutorial Mode, and preferred unit system +
+ * the recipe collection). A default icon preference belongs to a later migration and is not
+ * stubbed here.
  */
 public class SettingsActivity extends BaseActivity {
+
+    private TextView textUnitSystemValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,7 @@ public class SettingsActivity extends BaseActivity {
 
         setupDarkModeRow();
         setupExpiryAlertsRow();
+        setupUnitSystemRow();
         setupTutorialModeRow();
 
         findViewById(R.id.rowResetRecipes).setOnClickListener(v -> {
@@ -54,6 +59,50 @@ public class SettingsActivity extends BaseActivity {
         switchExpiryAlerts.setChecked(AppPreferences.isExpiryAlertsEnabled(this));
         switchExpiryAlerts.setOnCheckedChangeListener((button, checked) ->
                 AppPreferences.setExpiryAlertsEnabled(this, checked));
+    }
+
+    private void setupUnitSystemRow() {
+        textUnitSystemValue = findViewById(R.id.textUnitSystemValue);
+        refreshUnitSystemLabel();
+
+        findViewById(R.id.rowUnitSystem).setOnClickListener(v -> {
+            String[] entries = getResources().getStringArray(R.array.unit_system_entries);
+            String[] values = getResources().getStringArray(R.array.unit_system_values);
+            String current = AppPreferences.getUnitSystem(this);
+            int checkedIndex = 0;
+            for (int i = 0; i < values.length; i++) {
+                if (values[i].equals(current)) {
+                    checkedIndex = i;
+                    break;
+                }
+            }
+
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.pref_units_title)
+                    .setSingleChoiceItems(entries, checkedIndex, (dialog, which) -> {
+                        AppPreferences.setUnitSystem(this, values[which]);
+                        refreshUnitSystemLabel();
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .show();
+        });
+    }
+
+    private void refreshUnitSystemLabel() {
+        String[] entries = getResources().getStringArray(R.array.unit_system_entries);
+        String[] values = getResources().getStringArray(R.array.unit_system_values);
+        String current = AppPreferences.getUnitSystem(this);
+        String label = entries[0];
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].equals(current)) {
+                label = entries[i];
+                break;
+            }
+        }
+        // Show just the short form (before the parenthetical) in the row's trailing value.
+        int parenIndex = label.indexOf(" (");
+        textUnitSystemValue.setText(parenIndex > 0 ? label.substring(0, parenIndex) : label);
     }
 
     private void setupTutorialModeRow() {
