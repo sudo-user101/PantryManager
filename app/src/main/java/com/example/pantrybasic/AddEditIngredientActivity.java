@@ -20,6 +20,7 @@ import com.google.android.material.button.MaterialButton;
 
 import com.example.pantrybasic.db.DatabaseHelper;
 import com.example.pantrybasic.model.PantryItem;
+import com.example.pantrybasic.util.AppPreferences;
 import com.example.pantrybasic.util.DateUtils;
 import com.example.pantrybasic.util.FoodIconCatalog;
 import com.example.pantrybasic.util.FoodIconResolver;
@@ -84,6 +85,15 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
         editExpiryDate.setOnClickListener(v -> showDatePicker());
         textClearDate.setOnClickListener(v -> clearExpiryDate());
+
+        View buttonHelp = findViewById(R.id.buttonHelp);
+        buttonHelp.setVisibility(AppPreferences.isTutorialModeEnabled(this) ? View.VISIBLE : View.GONE);
+        buttonHelp.setOnClickListener(v ->
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.help_title_add_edit_ingredient)
+                        .setMessage(R.string.help_body_add_edit_ingredient)
+                        .setPositiveButton(R.string.action_got_it, null)
+                        .show());
 
         View buttonSave = findViewById(R.id.buttonSave);
         MaterialButton buttonDelete = findViewById(R.id.buttonDelete);

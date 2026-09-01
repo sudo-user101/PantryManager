@@ -71,6 +71,13 @@ public class PantryListActivity extends BaseActivity implements PantryAdapter.Li
         fab.setOnClickListener(openAddScreen);
         findViewById(R.id.buttonEmptyAdd).setOnClickListener(openAddScreen);
 
+        findViewById(R.id.buttonHelp).setOnClickListener(v ->
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.help_title_pantry_list)
+                        .setMessage(R.string.help_body_pantry_list)
+                        .setPositiveButton(R.string.action_got_it, null)
+                        .show());
+
         setupSearch();
         setupFloatingNav(NAV_PANTRY);
     }
@@ -85,6 +92,8 @@ public class PantryListActivity extends BaseActivity implements PantryAdapter.Li
         if (wasEmpty) {
             recyclerView.scheduleLayoutAnimation();
         }
+        findViewById(R.id.buttonHelp).setVisibility(
+                AppPreferences.isTutorialModeEnabled(this) ? View.VISIBLE : View.GONE);
     }
 
     private void setupSearch() {

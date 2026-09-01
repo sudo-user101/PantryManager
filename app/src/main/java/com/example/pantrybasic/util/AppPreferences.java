@@ -6,15 +6,16 @@ import android.content.res.Configuration;
 
 /**
  * Thin wrapper around the app's small SharedPreferences file, so every screen reads/writes the
- * same keys through one place instead of repeating raw strings. Dark Mode and expiry alerts
- * live here so far - unit system and a default icon preference belong to features this project
- * doesn't have yet and are deliberately not stubbed.
+ * same keys through one place instead of repeating raw strings. Dark Mode, expiry alerts, and
+ * Tutorial Mode live here so far - unit system and a default icon preference belong to
+ * features this project doesn't have yet and are deliberately not stubbed.
  */
 public final class AppPreferences {
 
     private static final String PREFS_NAME = "pantry_basic_prefs";
     public static final String KEY_DARK_MODE = "dark_mode_enabled";
     public static final String KEY_EXPIRY_ALERTS = "expiry_alerts_enabled";
+    public static final String KEY_TUTORIAL_MODE = "tutorial_mode_enabled";
 
     public static final boolean DEFAULT_EXPIRY_ALERTS = true;
 
@@ -50,5 +51,15 @@ public final class AppPreferences {
 
     public static void setExpiryAlertsEnabled(Context context, boolean enabled) {
         prefs(context).edit().putBoolean(KEY_EXPIRY_ALERTS, enabled).apply();
+    }
+
+    /** Off by default - a brand-new install shows the app exactly as a real user would see it,
+     * not pre-loaded with sample data. */
+    public static boolean isTutorialModeEnabled(Context context) {
+        return prefs(context).getBoolean(KEY_TUTORIAL_MODE, false);
+    }
+
+    public static void setTutorialModeEnabled(Context context, boolean enabled) {
+        prefs(context).edit().putBoolean(KEY_TUTORIAL_MODE, enabled).apply();
     }
 }

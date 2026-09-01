@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -19,6 +20,7 @@ import com.example.pantrybasic.model.PantryItem;
 import com.example.pantrybasic.model.Recipe;
 import com.example.pantrybasic.model.RecipeIngredient;
 import com.example.pantrybasic.model.RecipeMatchResult;
+import com.example.pantrybasic.util.AppPreferences;
 import com.example.pantrybasic.util.IngredientMatcher;
 
 import java.util.ArrayList;
@@ -54,6 +56,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> navigateBack());
+
+        View buttonHelp = findViewById(R.id.buttonHelp);
+        buttonHelp.setVisibility(AppPreferences.isTutorialModeEnabled(this) ? View.VISIBLE : View.GONE);
+        buttonHelp.setOnClickListener(v ->
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.help_title_recipe_detail)
+                        .setMessage(R.string.help_body_recipe_detail)
+                        .setPositiveButton(R.string.action_got_it, null)
+                        .show());
 
         long recipeId = getIntent().getLongExtra(EXTRA_RECIPE_ID, -1);
         Recipe recipe = recipeId != -1 ? databaseHelper.getRecipeWithIngredients(recipeId) : null;

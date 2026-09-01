@@ -125,6 +125,65 @@
 
             </LinearLayout>
 
+            <!-- ============================== HELP ============================== -->
+            <TextView
+                style="@style/PB.SettingsSectionHeader"
+                android:text="@string/settings_section_help" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:background="@drawable/bg_section_group"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    style="@style/PB.SettingsRow"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp">
+
+                    <FrameLayout style="@style/PB.SettingsIconChip">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="?"
+                            android:textColor="@color/accent"
+                            android:textSize="15sp" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tutorial_mode_title"
+                            android:textAppearance="@style/TextAppearance.PB.CardTitle" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/tutorial_mode_summary"
+                            android:textAppearance="@style/TextAppearance.PB.Secondary" />
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchTutorialMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        app:thumbTint="@color/white"
+                        app:trackTint="@color/pb_switch_track" />
+                </LinearLayout>
+
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

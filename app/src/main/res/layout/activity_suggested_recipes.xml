@@ -17,14 +17,34 @@
             android:orientation="vertical">
 
             <!-- Large-title header -->
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="28dp"
                 android:layout_marginEnd="24dp"
-                android:text="@string/title_suggested_recipes"
-                android:textAppearance="@style/TextAppearance.PB.LargeTitle" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/title_suggested_recipes"
+                    android:textAppearance="@style/TextAppearance.PB.LargeTitle" />
+
+                <TextView
+                    android:id="@+id/buttonHelp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:background="@drawable/bg_icon_chip"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:text="?"
+                    android:textColor="@color/accent"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"

@@ -20,6 +20,12 @@ public class PantryItem {
     /** ISO-8601 "yyyy-MM-dd" string, or null if the user did not set one. */
     private String expiryDate;
 
+    /** True for a row Tutorial Mode inserted as sample data, false for a real item the user
+     * added themselves. Not settable through any public constructor - only
+     * {@code DatabaseHelper} ever sets this, via {@link #setDemo}, when inserting sample rows
+     * or reading a row back from the database. */
+    private boolean isDemo;
+
     public PantryItem() {
     }
 
@@ -106,5 +112,13 @@ public class PantryItem {
 
     public boolean hasExpiryDate() {
         return expiryDate != null && !expiryDate.trim().isEmpty();
+    }
+
+    public boolean isDemo() {
+        return isDemo;
+    }
+
+    public void setDemo(boolean demo) {
+        isDemo = demo;
     }
 }

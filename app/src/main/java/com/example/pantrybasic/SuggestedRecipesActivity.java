@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +13,7 @@ import com.example.pantrybasic.db.DatabaseHelper;
 import com.example.pantrybasic.model.PantryItem;
 import com.example.pantrybasic.model.Recipe;
 import com.example.pantrybasic.model.RecipeMatchResult;
+import com.example.pantrybasic.util.AppPreferences;
 import com.example.pantrybasic.util.IngredientMatcher;
 
 import java.util.List;
@@ -51,6 +53,13 @@ public class SuggestedRecipesActivity extends BaseActivity implements RecipeAdap
         emptyStateSuggested = findViewById(R.id.emptyStateSuggested);
         emptyStateAlmostThere = findViewById(R.id.emptyStateAlmostThere);
 
+        findViewById(R.id.buttonHelp).setOnClickListener(v ->
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.help_title_suggested_recipes)
+                        .setMessage(R.string.help_body_suggested_recipes)
+                        .setPositiveButton(R.string.action_got_it, null)
+                        .show());
+
         setupFloatingNav(NAV_RECIPES);
     }
 
@@ -59,6 +68,8 @@ public class SuggestedRecipesActivity extends BaseActivity implements RecipeAdap
         super.onResume();
         // Recompute on every visit - the pantry may have changed since we were last shown.
         runMatchingEngine();
+        findViewById(R.id.buttonHelp).setVisibility(
+                AppPreferences.isTutorialModeEnabled(this) ? View.VISIBLE : View.GONE);
     }
 
     private void runMatchingEngine() {

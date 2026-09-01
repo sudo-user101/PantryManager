@@ -26,6 +26,7 @@ public class SettingsActivity extends BaseActivity {
 
         setupDarkModeRow();
         setupExpiryAlertsRow();
+        setupTutorialModeRow();
 
         findViewById(R.id.rowResetRecipes).setOnClickListener(v -> {
             DatabaseHelper.getInstance(this).resetRecipes();
@@ -53,6 +54,21 @@ public class SettingsActivity extends BaseActivity {
         switchExpiryAlerts.setChecked(AppPreferences.isExpiryAlertsEnabled(this));
         switchExpiryAlerts.setOnCheckedChangeListener((button, checked) ->
                 AppPreferences.setExpiryAlertsEnabled(this, checked));
+    }
+
+    private void setupTutorialModeRow() {
+        SwitchCompat switchTutorialMode = findViewById(R.id.switchTutorialMode);
+        switchTutorialMode.setChecked(AppPreferences.isTutorialModeEnabled(this));
+        switchTutorialMode.setOnCheckedChangeListener((button, checked) -> {
+            if (checked == AppPreferences.isTutorialModeEnabled(this)) return;
+            AppPreferences.setTutorialModeEnabled(this, checked);
+            DatabaseHelper databaseHelper = DatabaseHelper.getInstance(this);
+            if (checked) {
+                databaseHelper.insertDemoItems();
+            } else {
+                databaseHelper.clearDemoItems();
+            }
+        });
     }
 
     private void bindVersion() {

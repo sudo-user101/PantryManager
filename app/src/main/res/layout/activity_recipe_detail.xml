@@ -48,12 +48,32 @@
                 tools:text="Ready to make"
                 tools:textColor="@color/success" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="@string/label_ingredients"
-                android:textAppearance="@style/TextAppearance.PB.SectionTitle" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/label_ingredients"
+                    android:textAppearance="@style/TextAppearance.PB.SectionTitle" />
+
+                <TextView
+                    android:id="@+id/buttonHelp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:background="@drawable/bg_icon_chip"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:text="?"
+                    android:textColor="@color/accent"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/containerIngredients"

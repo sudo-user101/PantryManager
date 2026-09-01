@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.pantrybasic.model.PantryItem;
 import com.example.pantrybasic.model.Recipe;
 import com.example.pantrybasic.model.RecipeIngredient;
+import com.example.pantrybasic.util.DateUtils;
 import com.example.pantrybasic.util.FoodIconResolver;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "pantry_basic.db";
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 5;
 
     public static final String TABLE_PANTRY = "pantry_items";
     public static final String COL_ID = "_id";
@@ -34,6 +35,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_UNIT = "unit";
     public static final String COL_ICON = "icon_emoji";
     public static final String COL_EXPIRY = "expiry_date";
+    /** 1 for a row inserted by Tutorial Mode's sample data, 0 (or NULL, on older rows) for a
+     * real item the user added themselves. Lets "Tutorial Mode" off remove exactly the demo
+     * rows it added and never touch the user's own pantry. */
+    public static final String COL_IS_DEMO = "is_demo";
 
     // recipes columns
     public static final String TABLE_RECIPES = "recipes";
@@ -70,7 +75,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL_QUANTITY + " REAL NOT NULL, "
                 + COL_UNIT + " TEXT NOT NULL, "
                 + COL_ICON + " TEXT, "
-                + COL_EXPIRY + " TEXT)");
+                + COL_EXPIRY + " TEXT, "
+                + COL_IS_DEMO + " INTEGER NOT NULL DEFAULT 0)");
 
         createRecipeTables(db);
         RecipeSeeder.seed(db);
@@ -95,6 +101,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // Existing rows get a NULL expiry_date, meaning "no expiry set" - exactly the same
             // as a freshly-created row with the date left blank, so no fallback is needed here.
             db.execSQL("ALTER TABLE " + TABLE_PANTRY + " ADD COLUMN " + COL_EXPIRY + " TEXT");
+        }
+        if (oldVersion < 5) {
+            // Existing rows default to 0 (a real item, not sample data) via the column default.
+            db.execSQL("ALTER TABLE " + TABLE_PANTRY + " ADD COLUMN " + COL_IS_DEMO
+                    + " INTEGER NOT NULL DEFAULT 0");
         }
     }
 
@@ -234,6 +245,74 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    // ----------------------------------------------------------------
+    // Tutorial Mode sample data (Settings > Help)
+    // ----------------------------------------------------------------
+
+    /**
+     * Inserts a small curated set of pantry items, flagged as demo rows, chosen so one seeded
+     * recipe (Grilled Cheese Sandwich) is immediately "Ready to make" and a few others land in
+     * "Almost there" - giving Tutorial Mode something real to demonstrate. Safe to call more
+     * than once: does nothing if demo rows already exist, so re-enabling the toggle never
+     * duplicates them.
+     */
+    public void insertDemoItems() {
+        if (!getDemoItems().isEmpty()) {
+            return;
+        }
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            insertDemo(db, "Bread", 2, "slice", "🍞", null);
+            insertDemo(db, "Cheese", 60, "g", "🧀", null);
+            insertDemo(db, "Butter", 10, "g", "🧈", null);
+            insertDemo(db, "Potato", 4, "pcs", "🥔", null);
+            insertDemo(db, "Salt", 1, "pinch", "🧂", null);
+            // Deliberately expiring soon, so Tutorial Mode also shows off the expiry indicator.
+            insertDemo(db, "Milk", 1, "L", "🥛", DateUtils.formatForStorage(soonestExpiryDate()));
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    /** Removes exactly the rows {@link #insertDemoItems()} added - the user's own items (any
+     * row not flagged as demo) are never touched. */
+    public void clearDemoItems() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_PANTRY, COL_IS_DEMO + " = 1", null);
+    }
+
+    private List<PantryItem> getDemoItems() {
+        List<PantryItem> items = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        try (Cursor cursor = db.query(TABLE_PANTRY, null, COL_IS_DEMO + " = 1", null,
+                null, null, null)) {
+            while (cursor.moveToNext()) {
+                items.add(fromCursor(cursor));
+            }
+        }
+        return items;
+    }
+
+    private static java.util.Calendar soonestExpiryDate() {
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.add(java.util.Calendar.DAY_OF_MONTH, 2);
+        return calendar;
+    }
+
+    private void insertDemo(SQLiteDatabase db, String name, double quantity, String unit,
+                             String icon, String expiry) {
+        ContentValues values = new ContentValues();
+        values.put(COL_NAME, name);
+        values.put(COL_QUANTITY, quantity);
+        values.put(COL_UNIT, unit);
+        values.put(COL_ICON, icon);
+        values.put(COL_EXPIRY, expiry);
+        values.put(COL_IS_DEMO, 1);
+        db.insert(TABLE_PANTRY, null, values);
+    }
+
     private ContentValues toValues(PantryItem item) {
         ContentValues values = new ContentValues();
         values.put(COL_NAME, item.getName());
@@ -241,6 +320,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_UNIT, item.getUnit());
         values.put(COL_ICON, item.getIconEmoji());
         values.put(COL_EXPIRY, item.getExpiryDate());
+        values.put(COL_IS_DEMO, item.isDemo() ? 1 : 0);
         return values;
     }
 
@@ -254,6 +334,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             icon = FoodIconResolver.defaultEmojiFor(name);
         }
         String expiry = cursor.getString(cursor.getColumnIndexOrThrow(COL_EXPIRY));
-        return new PantryItem(id, name, quantity, unit, icon, expiry);
+        PantryItem item = new PantryItem(id, name, quantity, unit, icon, expiry);
+        item.setDemo(cursor.getInt(cursor.getColumnIndexOrThrow(COL_IS_DEMO)) == 1);
+        return item;
     }
 }

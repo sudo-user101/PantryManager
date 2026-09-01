@@ -75,4 +75,21 @@
     <string name="settings_section_preferences">Preferences</string>
     <string name="pref_expiry_alerts_title">Expiring-soon alerts</string>
     <string name="pref_expiry_alerts_summary">Highlight pantry items that expire within 3 days</string>
+
+    <string name="settings_section_help">Help</string>
+    <string name="tutorial_mode_title">Tutorial Mode</string>
+    <string name="tutorial_mode_summary">Add sample pantry items and show \"?\" tips on every screen</string>
+    <string name="action_got_it">Got it</string>
+
+    <string name="help_title_pantry_list">My Pantry</string>
+    <string name="help_body_pantry_list">This is everything you currently have. Tap a card to edit its quantity, unit, icon, or expiry date. Swipe a card left to delete it. The search bar filters by name, and the button in the corner adds a new ingredient.</string>
+
+    <string name="help_title_suggested_recipes">Suggested Recipes</string>
+    <string name="help_body_suggested_recipes">This screen checks your pantry against every recipe. \"Ready to make\" means you have everything, in a large enough quantity. \"Almost there\" means you\'re missing exactly one ingredient (or don\'t have quite enough of one). Tap a recipe to see full details.</string>
+
+    <string name="help_title_recipe_detail">Recipe Detail</string>
+    <string name="help_body_recipe_detail">The badge at the top shows whether you can make this right now. Below, each ingredient gets a ✓ if your pantry has enough of it, or a ✗ if it\'s missing or you don\'t have enough - exactly what decides which list the recipe appeared in.</string>
+
+    <string name="help_title_add_edit_ingredient">Add / Edit Ingredient</string>
+    <string name="help_body_add_edit_ingredient">Name, quantity, and unit are required - everything else is optional. The Food Icon updates automatically as you type a name, or tap it to pick your own. Expiry date is optional too; setting one lets this item show up as \"expiring soon\" or \"expired\" back on the Pantry List.</string>
 </resources>
